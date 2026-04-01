@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beamtenanwärter-Tool – Vorsorgeanalyse</title>
+<style>
+:root {
+  --primary: #1a2744;
+  --primary-light: #2c3e6b;
+  --primary-lighter: #3d5a99;
+  --accent: #c9a84c;
+  --accent-light: #e0c76e;
+  --bg: #f0f2f5;
+  --card-bg: #ffffff;
+  --text: #1a2744;
+  --text-light: #5a6a85;
+  --border: #d8dce6;
+  --success: #2e7d32;
+  --warning: #e65100;
+  --info: #0277bd;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(26,39,68,0.08);
+  --shadow-lg: 0 8px 32px rgba(26,39,68,0.12);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  position: relative;
+}
+.header h1 span { color: var(--accent); }
+.header p {
+  margin-top: 0.5rem;
+  opacity: 0.8;
+  font-size: 0.95rem;
+  position: relative;
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.card-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 1rem 1.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card-header .icon { font-size: 1.2rem; }
+.card-body { padding: 1.5rem; }
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 600px) {
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .form-grid .full-width { grid-column: 1 / -1; }
+}
+@media (min-width: 900px) {
+  .form-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+}
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.form-group input,
+.form-group select {
+  padding: 0.6rem 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fff;
+  color: var(--text);
+}
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+}
+.form-group input[type="number"] { -moz-appearance: textfield; }
+.form-group input[type="number"]::-webkit-outer-spin-button,
+.form-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+.ins-section-title {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 0.9rem;
+  padding: 0.75rem 0 0.25rem;
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: 0.5rem;
+  grid-column: 1 / -1;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+table tr:last-child td { border-bottom: none; }
+table tr:nth-child(even) { background: #f8f9fc; }
+.highlight-row { background: linear-gradient(90deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.05) 100%) !important; font-weight: 700; }
+.highlight-row td { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent) !important; }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+.amount { font-variant-numeric: tabular-nums; font-family: 'SF Mono', 'Fira Code', monospace; }
+.amount-positive { color: var(--success); }
+.amount-negative { color: var(--warning); }
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge-success { background: #e8f5e9; color: var(--success); }
+.badge-warning { background: #fff3e0; color: var(--warning); }
+.badge-info { background: #e1f5fe; color: var(--info); }
+.info-box {
+  background: linear-gradient(135deg, #e1f5fe 0%, #f0f7ff 100%);
+  border-left: 4px solid var(--info);
+  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.info-box strong { color: var(--info); }
+.warning-box {
+  background: linear-gradient(135deg, #fff3e0 0%, #fffaf0 100%);
+  border-left: 4px solid var(--warning);
+  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.warning-box strong { color: var(--warning); }
+.chart-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+.chart-box {
+  flex: 1 1 320px;
+  max-width: 480px;
+  text-align: center;
+}
+.chart-box h3 {
+  font-size: 0.95rem;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+canvas { max-width: 100%; height: auto; }
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.summary-item {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  text-align: center;
+}
+.summary-item .label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+.summary-item .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: var(--accent-light);
+}
+.summary-item.gold {
+  background: linear-gradient(135deg, var(--accent) 0%, #b8952e 100%);
+}
+.summary-item.gold .value { color: #fff; }
+.hidden { display: none !important; }
+.section-divider {
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin: 0.5rem 0 1.5rem;
+  border-radius: 2px;
+}
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media print {
+  body { background: #fff; font-size: 10pt; }
+  .header { padding: 1rem; background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .container { padding: 0; max-width: 100%; }
+  .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; margin-bottom: 0.75rem; }
+  .card-header { padding: 0.5rem 0.75rem; font-size: 0.9rem; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card-body { padding: 0.75rem; }
+  table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .form-group input, .form-group select { border: 1px solid #999; }
+  .no-print { display: none !important; }
+  .chart-container { page-break-inside: avoid; }
+  canvas { max-width: 300px; }
+  .summary-item { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .highlight-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚖️ Beamtenanwärter-<span>Tool</span></h1>
+  <p>Vorsorgeanalyse – Besoldung, Beihilfe & Versicherungsbedarf</p>
+</div>
+
+<div class="container">
+
+  <!-- Section 1: Persönliche Daten -->
+  <div class="card">
+    <div class="card-header"><span class="icon">👤</span> Persönliche Daten</div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="name" placeholder="Vor- und Nachname">
+        </div>
+        <div class="form-group">
+          <label>Geburtsdatum</label>
+          <input type="date" id="geburtsdatum">
+        </div>
+        <div class="form-group">
+          <label>Bundesland</label>
+          <select id="bundesland"><option value="">Bitte auswählen</option></select>
+        </div>
+        <div class="form-group">
+          <label>Dienstgrad</label>
+          <select id="dienstgrad"><option value="">Bitte zuerst Bundesland wählen</option></select>
+        </div>
+        <div class="form-group">
+          <label>Familienstand</label>
+          <select id="familienstand">
+            <option value="">Bitte auswählen</option>
+            <option value="ledig">ledig</option>
+            <option value="verheiratet">verheiratet</option>
+          </select>
+        </div>
+        <div class="form-group" id="ehegatte-group" style="display:none">
+          <label>Ehegatte beihilfeberechtigt</label>
+          <select id="ehegatte_bh">
+            <option value="Nein">Nein</option>
+            <option value="Ja">Ja</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Anzahl Kinder</label>
+          <select id="kinder">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4+</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Versicherungsvorschlag Eingabe -->
+  <div class="card no-print">
+    <div class="card-header"><span class="icon">🛡️</span> Versicherungsvorschlag – Eingabe</div>
+    <div class="card-body">
+      <div class="form-grid form-grid-3">
+        <div class="ins-section-title">Dienstunfähigkeit</div>
+        <div class="form-group">
+          <label>Beitrag (€/Monat)</label>
+          <input type="number" id="du_beitrag" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>Monatsrente (€)</label>
+          <input type="number" id="du_rente" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>Beitragsbefreiung bis LJ</label>
+          <select id="du_lj">
+            <option value="">Bitte wählen</option>
+            <option value="55">55</option><option value="56">56</option>
+            <option value="57">57</option><option value="58">58</option>
+            <option value="59">59</option><option value="60">60</option>
+            <option value="61">61</option><option value="62">62</option>
+            <option value="63">63</option><option value="64">64</option>
+            <option value="65">65</option><option value="66">66</option>
+            <option value="67">67</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Rückzahlung Fondsrente (€)</label>
+          <input type="number" id="du_fondsrente" min="0" step="0.01" value="0">
+        </div>
+
+        <div class="ins-section-title">Unfall</div>
+        <div class="form-group">
+          <label>Beitrag (€/Monat)</label>
+          <input type="number" id="unfall_beitrag" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>Vollinvalidität (€)</label>
+          <input type="number" id="unfall_voll" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>Unfalltod (€)</label>
+          <input type="number" id="unfall_tod" min="0" step="0.01" value="0">
+        </div>
+
+        <div class="ins-section-title">Altersvorsorge</div>
+        <div class="form-group">
+          <label>Beitrag (€/Monat)</label>
+          <input type="number" id="alter_beitrag" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>Rente (€)</label>
+          <input type="number" id="alter_rente" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>Typ</label>
+          <select id="alter_typ">
+            <option value="Riester">Riester-Rente</option>
+            <option value="Privat">Privatrente</option>
+          </select>
+        </div>
+
+        <div class="ins-section-title">Krankheit</div>
+        <div class="form-group">
+          <label>Beitrag (€/Monat)</label>
+          <input type="number" id="kv_beitrag" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>KH-Tagegeld (€)</label>
+          <input type="number" id="kv_tagegeld" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label>Kurtagegeld (€)</label>
+          <input type="number" id="kv_kurtagegeld" min="0" step="0.01" value="0">
+        </div>
+
+        <div class="ins-section-title">Haftpflicht</div>
+        <div class="form-group">
+          <label>Beitrag (€/Monat)</label>
+          <input type="number" id="haftpflicht_beitrag" min="0" step="0.01" value="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Ausgabe Section 1: Besoldung -->
+  <div class="card" id="card-besoldung">
+    <div class="card-header"><span class="icon">💰</span> Ihre aktuelle Besoldung</div>
+    <div class="card-body">
+      <div id="besoldung-output">
+        <p style="color:var(--text-light);text-align:center;padding:2rem 0;">Bitte wählen Sie Bundesland, Dienstgrad und Familienstand aus.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ausgabe Section 2: Beihilfe -->
+  <div class="card" id="card-beihilfe">
+    <div class="card-header"><span class="icon">🏥</span> Beihilfeansprüche</div>
+    <div class="card-body">
+      <div id="beihilfe-output">
+        <p style="color:var(--text-light);text-align:center;padding:2rem 0;">Beihilfesätze werden nach Eingabe berechnet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ausgabe Section 3: Versorgungslücke -->
+  <div class="card" id="card-versorgung">
+    <div class="card-header"><span class="icon">📊</span> Versorgungslücke bei Dienstunfähigkeit</div>
+    <div class="card-body">
+      <div class="warning-box">
+        <strong>⚠️ Wichtig:</strong> Beamtenanwärter haben in den ersten 5 Dienstjahren <strong>KEINEN Versorgungsanspruch</strong> bei Dienstunfähigkeit. Jeder 4. (bei Beamten sogar jeder 3.) wird vorzeitig berufsunfähig!
+      </div>
+      <div class="chart-container">
+        <div class="chart-box">
+          <h3>BU-Risiko nach Ursache</h3>
+          <canvas id="pieChart" width="360" height="360"></canvas>
+        </div>
+        <div class="chart-box">
+          <h3>Versorgungslücke nach Dienstjahren</h3>
+          <canvas id="barChart" width="420" height="320"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ausgabe Section 4: Versicherungsvorschlag -->
+  <div class="card" id="card-vorschlag">
+    <div class="card-header"><span class="icon">📋</span> Versicherungsvorschlag</div>
+    <div class="card-body">
+      <div id="vorschlag-output">
+        <p style="color:var(--text-light);text-align:center;padding:2rem 0;">Versicherungsdaten eingeben, um den Vorschlag zu sehen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ausgabe Section 5: Netto-Berechnung -->
+  <div class="card" id="card-netto">
+    <div class="card-header"><span class="icon">🧮</span> Netto-Berechnung</div>
+    <div class="card-body">
+      <div id="netto-output">
+        <p style="color:var(--text-light);text-align:center;padding:2rem 0;">Netto-Berechnung erfolgt automatisch.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Beamtenanwärter-Tool – Vorsorgeanalyse &copy; <span id="year"></span> | Alle Angaben ohne Gewähr
+</div>
+
+<script>
+// ==================== BESOLDUNGSDATEN ====================
+const BESOLDUNG_DATA = {"Baden-Württemberg":[["Polizeimeister-/Ass.- Anwärter (A7)","A7",1492.89,175.51,6.65,12.91,0.0,1.03,37.58,0.0,3.0,319.4,356.79],["Ass. Anwärter (A8)","A8",1492.89,175.51,6.65,12.91,0.0,1.03,37.58,0.0,3.0,319.4,356.79],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1492.89,175.51,6.65,12.91,0.0,1.03,37.58,0.0,3.0,319.4,356.79],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1548.78,175.51,6.65,20.25,0.0,1.62,46.16,0.0,3.69,331.31,368.69],["Inspektor-/Finanz-Anwärter  (A11)","A11",1548.78,175.51,6.65,20.25,0.0,1.62,46.16,0.0,3.69,331.31,368.69],["LAA GHS (A12)","A12",1693.53,175.51,6.65,41.41,0.0,3.31,71.0,0.0,5.68,362.14,399.52],["LAA Real- u. So. (A13)","A13",1726.46,175.51,6.65,46.66,0.0,3.73,77.08,0.0,6.16,369.15,406.54],["Referendar Gymnasium (A13+)","A13+",1762.62,175.51,6.65,52.58,0.0,4.2,83.83,0.0,6.7,376.85,414.24],["Richter","R1",1762.62,175.51,6.65,52.58,0.0,4.2,83.83,0.0,6.7,376.85,414.24]],"Bayern":[["Oberamtsgehilfe, Wachtmeister","A3",1389.33,165.59,6.65,0.0,0.0,0.0,21.08,0.0,1.68,297.34,332.61],["Hauptamtsgehilfe, Oberwachtmeister","A3",1389.33,165.59,6.65,0.0,0.0,0.0,21.08,0.0,1.68,297.34,332.61],["Amtsmeister, Hauptwachtmeister","A4",1389.33,165.59,6.65,0.0,0.0,0.0,21.08,0.0,1.68,297.34,332.61],["Ass. Anwärter (A5)","A5",1509.93,165.59,6.65,15.08,0.0,1.2,38.66,0.0,3.09,323.03,358.3],["Ass. Anwärter (A6)","A6",1509.93,165.59,6.65,15.08,0.0,1.2,38.66,0.0,3.09,323.03,358.3],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1509.93,165.59,6.65,15.08,0.0,1.2,38.66,0.0,3.09,323.03,358.3],["Ass. Anwärter (A8)","A8",1509.93,165.59,6.65,15.08,0.0,1.2,38.66,0.0,3.09,323.03,358.3],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1563.85,165.59,6.65,22.33,0.0,1.78,47.16,0.0,3.77,334.52,369.79],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1563.85,165.59,6.65,22.33,0.0,1.78,47.16,0.0,3.77,334.52,369.79],["Inspektor-/Finanz-Anwärter  (A11)","A11",1563.85,165.59,6.65,22.33,0.0,1.78,47.16,0.0,3.77,334.52,369.79],["LAA GHS (A12)","A12",1703.44,165.59,6.65,43.0,0.0,3.44,71.0,0.0,5.68,364.25,399.52],["LAA Real- u. So. (A13)","A13",1735.21,165.59,6.65,48.0,0.0,3.84,76.83,0.0,6.14,371.02,406.29],["Referendar Gymnasium (A13+)","A13+",1770.08,165.59,6.65,53.75,0.0,4.3,83.41,0.0,6.67,378.44,413.71],["Richter","R1",1770.08,165.59,6.65,53.75,0.0,4.3,83.41,0.0,6.67,378.44,413.71]],"Berlin":[["Ass. Anwärter (A5)","A5",1467.66,142.44,6.65,9.58,0.0,0.86,28.83,0.0,2.59,314.03,344.37],["Ass. Anwärter (A6)","A6",1467.66,142.44,6.65,9.58,0.0,0.86,28.83,0.0,2.59,314.03,344.37],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1467.66,142.44,6.65,9.58,0.0,0.86,28.83,0.0,2.59,314.03,344.37],["Ass. Anwärter (A8)","A8",1467.66,142.44,6.65,9.58,0.0,0.86,28.83,0.0,2.59,314.03,344.37],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1527.45,142.44,6.65,17.41,0.0,1.56,37.75,0.0,3.39,326.76,357.1],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1527.45,142.44,6.65,17.41,0.0,1.56,37.75,0.0,3.39,326.76,357.1],["Inspektor-/Finanz-Anwärter  (A11)","A11",1527.45,142.44,6.65,17.41,0.0,1.56,37.75,0.0,3.39,326.76,357.1],["LAA GHS (A12)","A12",1682.25,142.44,6.65,39.58,0.0,3.56,63.16,0.0,5.68,359.74,390.08],["LAA Real- u. So. (A13)","A13",1717.47,142.44,6.65,45.25,0.0,4.07,69.33,0.0,6.23,367.24,397.58],["Referendar Gymnasium (A13+)","A13+",1756.14,142.44,6.65,51.41,0.0,4.62,76.5,0.0,6.88,375.47,405.81],["Richter","R1",1756.14,142.44,6.65,51.41,0.0,4.62,76.5,0.0,6.88,375.47,405.81]],"Brandenburg":[["Ass. Anwärter (A5)","A5",1518.37,377.16,6.65,16.25,0.0,1.46,75.91,0.0,6.83,324.83,405.16],["Ass. Anwärter (A6)","A6",1518.37,377.16,6.65,16.25,0.0,1.46,75.91,0.0,6.83,324.83,405.16],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1518.37,377.16,6.65,16.25,0.0,1.46,75.91,0.0,6.83,324.83,405.16],["Ass. Anwärter (A8)","A8",1518.37,377.16,6.65,16.25,0.0,1.46,75.91,0.0,6.83,324.83,405.16],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1571.43,377.16,6.65,23.41,0.0,2.1,85.91,0.0,7.73,336.13,416.47],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1571.43,377.16,6.65,23.41,0.0,2.1,85.91,0.0,7.73,336.13,416.47],["Inspektor-/Finanz-Anwärter  (A11)","A11",1571.43,377.16,6.65,23.41,0.0,2.1,85.91,0.0,7.73,336.13,416.47],["LAA GHS (A12)","A12",1708.84,377.16,6.65,43.75,0.0,3.93,112.5,0.0,10.12,365.4,445.73],["LAA Real- u. So. (A13)","A13",1740.1,377.16,6.65,48.75,0.0,4.38,118.58,0.0,10.67,372.06,452.39],["Referendar Gymnasium (A13+)","A13+",1774.42,377.16,6.65,54.58,0.0,4.91,125.5,0.0,11.29,379.37,459.7],["Richter","R1",1774.42,377.16,6.65,54.58,0.0,4.91,125.5,0.0,11.29,379.37,459.7]],"Bremen":[["Ass. Anwärter (A6)","A6",1457.11,157.44,6.65,8.0,0.0,0.72,29.5,0.0,2.65,311.78,345.32],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1457.11,157.44,6.65,8.0,0.0,0.72,29.5,0.0,2.65,311.78,345.32],["Ass. Anwärter (A8)","A8",1457.11,157.44,6.65,8.0,0.0,0.72,29.5,0.0,2.65,311.78,345.32],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1513.45,165.4,6.65,15.58,0.0,1.4,39.08,0.0,3.51,323.78,359.01],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1513.45,165.4,6.65,15.58,0.0,1.4,39.08,0.0,3.51,323.78,359.01],["Inspektor-/Finanz-Anwärter  (A11)","A11",1513.45,165.4,6.65,15.58,0.0,1.4,39.08,0.0,3.51,323.78,359.01],["LAA GHS (A12)","A12",1659.25,165.4,6.65,36.0,0.0,3.24,63.16,0.0,5.68,354.84,390.07],["LAA Real- u. So. (A13)","A13",1692.41,165.4,6.65,41.25,0.0,3.71,69.0,0.0,6.21,361.9,397.13],["Referendar Gymnasium (A13+)","A13+",1728.85,165.4,6.65,47.0,0.0,4.23,75.58,0.0,6.8,369.66,404.89],["Richter","R1",1728.85,165.4,6.65,47.0,0.0,4.23,75.58,0.0,6.8,369.66,404.89]],"Hamburg":[["Amtsmeister, Hauptwachtmeister","A4",1370.55,161.32,6.65,0.0,0.0,0.0,18.0,0.0,1.62,192.81,215.39],["Ass. Anwärter (A5)","A5",1496.18,161.32,6.65,13.25,0.0,1.19,35.91,0.0,3.23,210.4,232.98],["Ass. Anwärter (A6)","A6",1496.18,161.32,6.65,13.25,0.0,1.19,35.91,0.0,3.23,210.4,232.98],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1496.18,161.32,6.65,13.25,0.0,1.19,35.91,0.0,3.23,210.4,232.98],["Ass. Anwärter (A8)","A8",1496.18,161.32,6.65,13.25,0.0,1.19,35.91,0.0,3.23,210.4,232.98],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1552.33,161.32,6.65,20.66,0.0,1.85,44.58,0.0,4.01,218.26,240.84],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1552.33,161.32,6.65,20.66,0.0,1.85,44.58,0.0,4.01,218.26,240.84],["Inspektor-/Finanz-Anwärter  (A11)","A11",1552.33,161.32,6.65,20.66,0.0,1.85,44.58,0.0,4.01,218.26,240.84],["LAA GHS (A12)","A12",1552.33,161.32,6.65,20.66,0.0,1.85,44.58,0.0,4.01,218.26,240.84],["LAA Real- u. So. (A13)","A13",1767.17,161.32,6.65,53.25,0.0,4.79,82.16,0.0,7.39,248.33,270.92],["Referendar Gymnasium (A13+)","A13+",1767.17,161.32,6.65,53.25,0.0,4.79,82.16,0.0,7.39,248.33,270.92],["Richter","R1",1767.17,161.32,6.65,53.25,0.0,4.79,82.16,0.0,7.39,248.33,270.92]],"Hessen":[["Ass. Anwärter (A6)","A6",1515.38,172.1,6.65,15.75,0.0,1.42,40.25,0.0,3.62,324.19,360.85],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1515.38,172.1,6.65,15.75,0.0,1.42,40.25,0.0,3.62,324.19,360.85],["Ass. Anwärter (A8)","A8",1515.38,172.1,6.65,15.75,0.0,1.42,40.25,0.0,3.62,324.19,360.85],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1586.89,172.1,6.65,25.42,0.0,2.29,51.75,0.0,4.66,339.42,376.08],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1586.89,172.1,6.65,25.42,0.0,2.29,51.75,0.0,4.66,339.42,376.08],["Inspektor-/Finanz-Anwärter  (A11)","A11",1586.89,172.1,6.65,25.42,0.0,2.29,51.75,0.0,4.66,339.42,376.08],["LAA GHS (A12)","A12",1772.02,172.1,6.65,53.92,0.0,4.85,85.75,0.0,7.72,378.86,415.51],["LAA Real- u. So. (A13)","A13",1814.17,172.1,6.65,61.0,0.0,5.49,93.92,0.0,8.45,387.83,424.49],["Referendar Gymnasium (A13+)","A13+",1860.41,172.1,6.65,69.17,0.0,6.23,102.83,0.0,9.25,397.68,434.34],["Richter","R1",1860.41,172.1,6.65,69.17,0.0,6.23,102.83,0.0,9.25,397.68,434.34]],"Mecklenburg-Vorpommern":[["Amtsmeister, Hauptwachtmeister","A4",1353.13,160.28,6.65,0.0,0.0,0.0,15.58,0.0,1.4,289.63,323.77],["Ass. Anwärter (A5)","A5",1478.54,160.28,6.65,11.08,0.0,0.99,33.0,0.0,2.97,316.35,350.49],["Ass. Anwärter (A6)","A6",1478.54,160.28,6.65,11.08,0.0,0.99,33.0,0.0,2.97,316.35,350.49],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1478.54,160.28,6.65,11.08,0.0,0.99,33.0,0.0,2.97,316.35,350.49],["Ass. Anwärter (A8)","A8",1478.54,160.28,6.65,11.08,0.0,0.99,33.0,0.0,2.97,316.35,350.49],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1534.62,160.28,6.65,18.33,0.0,1.64,41.58,0.0,3.74,328.29,362.43],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1534.62,160.28,6.65,18.33,0.0,1.64,41.58,0.0,3.74,328.29,362.43],["Inspektor-/Finanz-Anwärter  (A11)","A11",1534.62,160.28,6.65,18.33,0.0,1.64,41.58,0.0,3.74,328.29,362.43],["LAA GHS (A12)","A12",1679.79,160.28,6.65,39.25,0.0,3.53,65.75,0.0,5.91,359.21,393.35],["LAA Real- u. So. (A13)","A13",1712.8,160.28,6.65,44.41,0.0,3.99,71.66,0.0,6.44,366.24,400.38],["Referendar Gymnasium (A13+)","A13+",1749.08,160.28,6.65,50.25,0.0,4.52,78.58,0.0,7.07,373.97,408.11],["Richter","R1",1749.08,160.28,6.65,50.25,0.0,4.52,78.58,0.0,7.07,373.97,408.11]],"Niedersachsen":[["Ass. Anwärter (A5)","A5",1409.04,157.84,6.65,1.58,0.0,0.14,22.75,0.0,2.04,301.54,335.16],["Ass. Anwärter (A6)","A6",1409.04,157.84,6.65,1.58,0.0,0.14,22.75,0.0,2.04,301.54,335.16],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1409.04,157.84,6.65,1.58,0.0,0.14,22.75,0.0,2.04,301.54,335.16],["Ass. Anwärter (A8)","A8",1409.04,157.84,6.65,1.58,0.0,0.14,22.75,0.0,2.04,301.54,335.16],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1469.74,165.72,6.65,9.83,0.0,0.88,32.58,0.0,2.93,314.47,349.77],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1469.74,165.72,6.65,9.83,0.0,0.88,32.58,0.0,2.93,314.47,349.77],["Inspektor-/Finanz-Anwärter  (A11)","A11",1469.74,165.72,6.65,9.83,0.0,0.88,32.58,0.0,2.93,314.47,349.77],["LAA GHS (A12)","A12",1626.91,165.72,6.65,31.25,0.0,2.81,57.58,0.0,5.18,347.95,383.25],["LAA Real- u. So. (A13)","A13",1662.66,165.72,6.65,36.66,0.0,3.29,63.83,0.0,5.74,355.56,390.86],["Referendar Gymnasium (A13+)","A13+",1701.92,165.72,6.65,42.66,0.0,3.83,70.83,0.0,6.37,363.93,399.22],["Richter","R1",1701.92,165.72,6.65,42.66,0.0,3.83,70.83,0.0,6.37,363.93,399.22]],"Nordrhein-Westfalen":[["Ass. Anwärter (A5)","A5",1499.78,164.64,6.65,13.75,0.0,1.23,36.91,0.0,3.32,320.87,355.94],["Ass. Anwärter (A6)","A6",1499.78,164.64,6.65,13.75,0.0,1.23,36.91,0.0,3.32,320.87,355.94],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1499.78,162.7,6.65,13.75,0.0,1.23,36.66,0.0,3.29,320.87,355.52],["Ass. Anwärter (A8)","A8",1499.78,162.7,6.65,13.75,0.0,1.23,36.66,0.0,3.29,320.87,355.52],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1555.68,168.76,6.65,21.25,0.0,1.91,46.33,0.0,4.16,332.78,368.72],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1555.68,168.76,6.65,21.25,0.0,1.91,46.33,0.0,4.16,332.78,368.72],["Inspektor-/Finanz-Anwärter  (A11)","A11",1555.68,168.76,6.65,21.25,0.0,1.91,46.33,0.0,4.16,332.78,368.72],["LAA GHS (A12)","A12",1700.37,168.76,6.65,42.5,0.0,3.82,71.0,0.0,6.39,363.6,399.54],["LAA Real- u. So. (A13)","A13",1733.28,168.76,6.65,47.66,0.0,4.28,77.08,0.0,6.93,370.61,406.55],["Referendar Gymnasium (A13+)","A13+",1769.43,168.76,6.65,53.75,0.0,4.83,83.83,0.0,7.54,378.31,414.25],["Richter","R1",1769.43,168.76,6.65,53.75,0.0,4.83,83.83,0.0,7.54,378.31,414.25]],"Rheinland-Pfalz":[["Ass. Anwärter (A5)","A5",1511.65,85.22,6.65,15.33,0.0,1.37,26.91,0.0,2.42,323.4,341.55],["Ass. Anwärter (A6)","A6",1511.65,85.22,6.65,15.33,0.0,1.37,26.91,0.0,2.42,323.4,341.55],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1511.65,85.22,6.65,15.33,0.0,1.37,26.91,0.0,2.42,323.4,341.55],["Ass. Anwärter (A8)","A8",1511.65,85.22,6.65,15.33,0.0,1.37,26.91,0.0,2.42,323.4,341.55],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1567.85,85.22,6.65,22.83,0.0,2.05,35.16,0.0,3.16,335.37,353.52],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1567.85,85.22,6.65,22.83,0.0,2.05,35.16,0.0,3.16,335.37,353.52],["Inspektor-/Finanz-Anwärter  (A11)","A11",1567.85,85.22,6.65,22.83,0.0,2.05,35.16,0.0,3.16,335.37,353.52],["LAA GHS (A12)","A12",1713.55,85.22,6.65,44.58,0.0,4.01,58.66,0.0,5.27,366.4,384.55],["LAA Real- u. So. (A13)","A13",1746.71,85.22,6.65,49.91,0.0,4.49,64.33,0.0,5.78,373.47,391.62],["Referendar Gymnasium (A13+)","A13+",1783.13,85.22,6.65,55.91,0.0,5.03,71.0,0.0,6.39,381.22,399.38],["Richter","R1",1783.13,85.22,6.65,55.91,0.0,5.03,71.0,0.0,6.39,381.22,399.38]],"Saarland":[["Amtsmeister, Hauptwachtmeister","A4",1303.45,160.0,6.65,0.0,0.0,0.0,9.0,0.0,0.81,279.05,313.13],["Ass. Anwärter (A6)","A6",1423.52,160.0,6.65,3.58,0.0,0.32,25.08,0.0,2.25,304.63,338.71],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1423.52,160.0,6.65,3.58,0.0,0.32,25.08,0.0,2.25,304.63,338.71],["Ass. Anwärter (A8)","A8",1423.52,160.0,6.65,3.58,0.0,0.32,25.08,0.0,2.25,304.63,338.71],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1477.21,160.0,6.65,10.83,0.0,0.97,32.75,0.0,2.94,316.06,350.14],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1477.21,160.0,6.65,10.83,0.0,0.97,32.75,0.0,2.94,316.06,350.14],["Inspektor-/Finanz-Anwärter  (A11)","A11",1477.21,160.0,6.65,10.83,0.0,0.97,32.75,0.0,2.94,316.06,350.14],["LAA GHS (A12)","A12",1616.2,160.0,6.65,29.66,0.0,2.66,54.75,0.0,4.92,345.67,379.75],["LAA Real- u. So. (A13)","A13",1647.82,160.0,6.65,34.41,0.0,3.09,60.16,0.0,5.41,352.4,386.48],["Referendar Gymnasium (A13+)","A13+",1682.56,160.0,6.65,39.75,0.0,3.57,66.33,0.0,5.96,359.8,393.88],["Richter","R1",1682.56,160.0,6.65,39.75,0.0,3.57,66.33,0.0,5.96,359.8,393.88]],"Sachsen":[["Ass. Anwärter (A5)","A5",1404.79,271.9,6.65,1.08,0.0,0.09,37.16,0.0,3.34,300.64,358.55],["Ass. Anwärter (A6)","A6",1528.41,271.9,6.65,16.33,0.0,1.46,56.91,0.0,5.12,326.97,384.88],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1528.41,271.9,6.65,16.33,0.0,1.46,56.91,0.0,5.12,326.97,384.88],["Ass. Anwärter (A8)","A8",1528.41,271.9,6.65,16.33,0.0,1.46,56.91,0.0,5.12,326.97,384.88],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1583.69,271.9,6.65,23.66,0.0,2.12,66.58,0.0,5.99,338.74,396.66],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1583.69,271.9,6.65,23.66,0.0,2.12,66.58,0.0,5.99,338.74,396.66],["Inspektor-/Finanz-Anwärter  (A11)","A11",1583.69,271.9,6.65,23.66,0.0,2.12,66.58,0.0,5.99,338.74,396.66],["LAA GHS (A12)","A12",1726.79,271.9,6.65,44.91,0.0,4.04,93.16,0.0,8.38,369.22,427.14],["LAA Real- u. So. (A13)","A13",1795.1,271.9,6.65,56.0,0.0,5.04,106.25,0.0,9.56,383.77,441.69],["Referendar Gymnasium (A13+)","A13+",1795.1,271.9,6.65,56.0,0.0,5.04,106.25,0.0,9.56,383.77,441.69],["Richter","R1",1795.1,271.9,6.65,56.0,0.0,5.04,106.25,0.0,9.56,383.77,441.69]],"Sachsen-Anhalt":[["Amtsmeister, Hauptwachtmeister","A4",1458.94,164.44,6.65,8.25,0.0,0.74,30.83,0.0,2.77,312.17,347.2],["Ass. Anwärter (A5)","A5",1458.94,164.44,6.65,8.25,0.0,0.74,30.83,0.0,2.77,312.17,347.2],["Ass. Anwärter (A6)","A6",1458.94,164.44,6.65,8.25,0.0,0.74,30.83,0.0,2.77,312.17,347.2],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1458.94,164.44,6.65,8.25,0.0,0.74,30.83,0.0,2.77,312.17,347.2],["Ass. Anwärter (A8)","A8",1458.94,164.44,6.65,8.25,0.0,0.74,30.83,0.0,2.77,312.17,347.2],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1512.82,164.44,6.65,15.5,0.0,1.39,38.75,0.0,3.48,323.65,358.67],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1512.82,164.44,6.65,15.5,0.0,1.39,38.75,0.0,3.48,323.65,358.67],["Inspektor-/Finanz-Anwärter  (A11)","A11",1512.82,164.44,6.65,15.5,0.0,1.39,38.75,0.0,3.48,323.65,358.67],["LAA GHS (A12)","A12",1652.28,164.44,6.65,35.0,0.0,3.15,61.75,0.0,5.55,353.35,388.38],["LAA Real- u. So. (A13)","A13",1684.0,164.44,6.65,39.83,0.0,3.58,67.41,0.0,6.06,360.11,395.13],["Referendar Gymnasium (A13+)","A13+",1718.85,164.44,6.65,45.41,0.0,4.08,73.5,0.0,6.61,367.53,402.56],["Richter","R1",1718.85,164.44,6.65,45.41,0.0,4.08,73.5,0.0,6.61,367.53,402.56]],"Schleswig-Holstein":[["Ass. Anwärter (A6)","A6",1467.18,164.21,6.65,9.41,0.0,0.84,32.0,0.0,2.88,313.93,348.9],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1467.18,164.21,6.65,9.41,0.0,0.84,32.0,0.0,2.88,313.93,348.9],["Ass. Anwärter (A8)","A8",1467.18,164.21,6.65,9.41,0.0,0.84,32.0,0.0,2.88,313.93,348.9],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1544.56,164.21,6.65,19.75,0.0,1.77,43.75,0.0,3.93,330.41,365.38],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1544.56,164.21,6.65,19.75,0.0,1.77,43.75,0.0,3.93,330.41,365.38],["Inspektor-/Finanz-Anwärter  (A11)","A11",1544.56,164.21,6.65,19.75,0.0,1.77,43.75,0.0,3.93,330.41,365.38],["LAA GHS (A12)","A12",1712.84,164.21,6.65,44.41,0.0,3.99,72.41,0.0,6.51,366.25,401.23],["LAA Real- u. So. (A13)","A13",1746.53,164.21,6.65,49.91,0.0,4.49,78.75,0.0,7.08,373.43,408.4],["Referendar Gymnasium (A13+)","A13+",1783.52,164.21,6.65,56.08,0.0,5.04,85.75,0.0,7.71,381.31,416.28],["Richter","R1",1783.52,164.21,6.65,56.08,0.0,5.04,85.75,0.0,7.71,381.31,416.28]],"Thüringen":[["Ass. Anwärter (A6)","A6",1492.02,177.25,6.65,12.75,0.0,1.14,37.58,0.0,3.38,319.22,356.97],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1492.02,177.25,6.65,12.75,0.0,1.14,37.58,0.0,3.38,319.22,356.97],["Ass. Anwärter (A8)","A8",1492.02,177.25,6.65,12.75,0.0,1.14,37.58,0.0,3.38,319.22,356.97],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1552.32,177.25,6.65,20.66,0.0,1.85,47.16,0.0,4.24,332.06,369.81],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1552.32,177.25,6.65,20.66,0.0,1.85,47.16,0.0,4.24,332.06,369.81],["Inspektor-/Finanz-Anwärter  (A11)","A11",1552.32,177.25,6.65,20.66,0.0,1.85,47.16,0.0,4.24,332.06,369.81],["LAA GHS (A12)","A12",1708.4,177.25,6.65,43.75,0.0,3.93,74.08,0.0,6.66,365.31,403.06],["LAA Real- u. So. (A13)","A13",1743.92,177.25,6.65,49.41,0.0,4.44,80.58,0.0,7.25,372.87,410.63],["Referendar Gymnasium (A13+)","A13+",1782.92,177.25,6.65,55.91,0.0,5.03,88.08,0.0,7.92,381.18,418.93],["Richter","R1",1782.92,177.25,6.65,55.91,0.0,5.03,88.08,0.0,7.92,381.18,418.93]],"Bundesbeihilfe":[["Hauptamtsgehilfe, Oberwachtmeister","A3",1407.63,171.28,6.65,1.41,0.0,0.11,24.41,0.0,1.95,301.24,337.72],["Amtsmeister, Hauptwachtmeister","A4",1407.63,171.28,6.65,1.41,0.0,0.11,24.41,0.0,1.95,301.24,337.72],["Ass. Anwärter (A5)","A5",1407.63,171.28,6.65,1.41,0.0,0.11,24.41,0.0,1.95,301.24,337.72],["Ass. Anwärter (A6)","A6",1407.63,171.28,6.65,1.41,0.0,0.11,24.41,0.0,1.95,301.24,337.72],["Polizeimeister-/Ass.- Anwärter (A7)","A7",1473.37,171.28,6.65,10.41,0.0,0.83,33.91,0.0,2.71,315.24,351.73],["Ass. Anwärter (A8)","A8",1473.37,171.28,6.65,10.41,0.0,0.83,33.91,0.0,2.71,315.24,351.73],["Polizeikommissar-/Inspektor-/Finanz-Anwärter  (A9)","A9",1473.37,171.28,6.65,10.41,0.0,0.83,33.91,0.0,2.71,315.24,351.73],["Forst-Ing., Inspektor-/Finanz-Anwärter (A10)","A10",1744.22,171.28,6.65,49.41,0.0,3.95,79.66,0.0,6.37,372.94,409.42],["Inspektor-/Finanz-Anwärter  (A11)","A11",1744.22,171.28,6.65,49.41,0.0,3.95,79.66,0.0,6.37,372.94,409.42],["LAA GHS (A12)","A12",1744.22,171.28,6.65,49.41,0.0,3.95,79.66,0.0,6.37,372.94,409.42],["LAA Real- u. So. (A13)","A13",2624.08,171.28,6.65,221.75,0.0,17.74,258.41,0.0,20.67,560.35,596.83],["Referendar Gymnasium (A13+)","A13+",2624.08,171.28,6.65,221.75,0.0,17.74,258.41,0.0,20.67,560.35,596.83],["Richter","R1",2624.08,171.28,6.65,221.75,0.0,17.74,258.41,0.0,20.67,560.35,596.83]]};
+
+// ==================== KONFIGURATIONSDATEN ====================
+const WAHLLEISTUNGEN = {
+  "Baden-Württemberg": { beihilfefaehig: true, hinweis: "bei Gehaltsabzug von 22 €" },
+  "Bayern": { beihilfefaehig: true },
+  "Berlin": { beihilfefaehig: false },
+  "Brandenburg": { beihilfefaehig: false },
+  "Bremen": { beihilfefaehig: false },
+  "Hamburg": { beihilfefaehig: false },
+  "Hessen": { beihilfefaehig: true },
+  "Mecklenburg-Vorpommern": { beihilfefaehig: false },
+  "Niedersachsen": { beihilfefaehig: false },
+  "Nordrhein-Westfalen": { beihilfefaehig: true },
+  "Rheinland-Pfalz": { beihilfefaehig: true, hinweis: "bei Gehaltsabzug von 26 €" },
+  "Saarland": { beihilfefaehig: false },
+  "Sachsen": { beihilfefaehig: true },
+  "Sachsen-Anhalt": { beihilfefaehig: true },
+  "Schleswig-Holstein": { beihilfefaehig: false },
+  "Thüringen": { beihilfefaehig: true },
+  "Bundesbeihilfe": { beihilfefaehig: true },
+};
+
+const EHEGATTEN_BEIHILFE = {
+  "Baden-Württemberg": { grenze: "20.000 €", zeitraum: "jeweils in den letzten 3 Jahren (max. 30.000 €)" },
+  "Bayern": { grenze: "20.000 €", zeitraum: "vorletztes KJ" },
+  "Berlin": { grenze: "17.000 €", zeitraum: "vorletztes KJ" },
+  "Brandenburg": { grenze: "20.000 €", zeitraum: "vorletztes KJ" },
+  "Bremen": { grenze: "12.000 €", zeitraum: "letztes KJ" },
+  "Hamburg": { grenze: "18.000 €", zeitraum: "letztes KJ" },
+  "Hessen": { grenze: "19.488 €", zeitraum: "vorletztes KJ" },
+  "Mecklenburg-Vorpommern": { grenze: "20.000 €", zeitraum: "vorletztes KJ" },
+  "Niedersachsen": { grenze: "18.000 €", zeitraum: "vorletztes KJ" },
+  "Nordrhein-Westfalen": { grenze: "18.000 €", zeitraum: "letztes KJ" },
+  "Rheinland-Pfalz": { grenze: "17.000 €", zeitraum: "vorletztes KJ", hinweis: "Heirat vor 01.01.2012: Grenze 20.450 €" },
+  "Saarland": { grenze: "16.000 €", zeitraum: "letztes KJ" },
+  "Sachsen": { grenze: "18.000 €", zeitraum: "Durchschnitt letzte 3 Jahre" },
+  "Sachsen-Anhalt": { grenze: "20.000 €", zeitraum: "vorletztes KJ" },
+  "Schleswig-Holstein": { grenze: "20.000 €", zeitraum: "vorletztes KJ" },
+  "Thüringen": { grenze: "18.000 €", zeitraum: "vorletztes KJ" },
+  "Bundesbeihilfe": { grenze: "17.000 €", zeitraum: "vorletztes KJ" },
+};
+
+const BU_RISIKO = [
+  { ursache: "Nervenkrankheiten", anteil: 0.3152, farbe: "#e74c3c" },
+  { ursache: "Motorische Erkrankungen", anteil: 0.2102, farbe: "#3498db" },
+  { ursache: "Sonstige", anteil: 0.1566, farbe: "#95a5a6" },
+  { ursache: "Krebs", anteil: 0.1548, farbe: "#9b59b6" },
+  { ursache: "Unfälle", anteil: 0.0898, farbe: "#e67e22" },
+  { ursache: "Herz/Kreislauf", anteil: 0.0734, farbe: "#2ecc71" },
+];
+
+const VERSORGUNGSLUECKE = [
+  { jahre: 0, luecke: 0 },
+  { jahre: 5, luecke: 0 },
+  { jahre: 6, luecke: 0.35 },
+  { jahre: 19, luecke: 0.35 },
+  { jahre: 20, luecke: 0.3588 },
+  { jahre: 25, luecke: 0.4484 },
+  { jahre: 30, luecke: 0.5381 },
+  { jahre: 35, luecke: 0.6276 },
+  { jahre: 40, luecke: 0.7175 },
+];
+
+// KV-Vergleich: Index 11=KV-Betrag ledig (€), 12=KV-Betrag verheiratet (€)
+
+// ==================== HILFSFUNKTIONEN ====================
+function fmt(val) {
+  return val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+function pct(val) {
+  return (val * 100).toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' %';
+}
+function pct1(val) {
+  return (val * 100).toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+}
+function getVal(id) {
+  return parseFloat(document.getElementById(id).value) || 0;
+}
+function getStr(id) {
+  return document.getElementById(id).value;
+}
+
+// ==================== DOM REFERENZEN ====================
+const elBundesland = document.getElementById('bundesland');
+const elDienstgrad = document.getElementById('dienstgrad');
+const elFamilienstand = document.getElementById('familienstand');
+const elEhegatteGroup = document.getElementById('ehegatte-group');
+const elEhegatteBh = document.getElementById('ehegatte_bh');
+const elKinder = document.getElementById('kinder');
+
+// ==================== BUNDESLAND-DROPDOWN FÜLLEN ====================
+const bundeslaender = Object.keys(BESOLDUNG_DATA);
+bundeslaender.forEach(bl => {
+  const opt = document.createElement('option');
+  opt.value = bl;
+  opt.textContent = bl;
+  elBundesland.appendChild(opt);
+});
+
+// ==================== EVENT LISTENER ====================
+elBundesland.addEventListener('change', () => { updateDienstgrade(); recalc(); });
+elDienstgrad.addEventListener('change', recalc);
+elFamilienstand.addEventListener('change', () => {
+  elEhegatteGroup.style.display = elFamilienstand.value === 'verheiratet' ? '' : 'none';
+  recalc();
+});
+elEhegatteBh.addEventListener('change', recalc);
+elKinder.addEventListener('change', recalc);
+
+// Versicherungsfelder
+['du_beitrag','du_rente','du_lj','du_fondsrente','unfall_beitrag','unfall_voll','unfall_tod',
+ 'alter_beitrag','alter_rente','alter_typ','kv_beitrag','kv_tagegeld','kv_kurtagegeld','haftpflicht_beitrag']
+.forEach(id => document.getElementById(id).addEventListener('change', recalc));
+['du_beitrag','du_rente','du_fondsrente','unfall_beitrag','unfall_voll','unfall_tod',
+ 'alter_beitrag','alter_rente','kv_beitrag','kv_tagegeld','kv_kurtagegeld','haftpflicht_beitrag']
+.forEach(id => document.getElementById(id).addEventListener('input', recalc));
+
+// ==================== DIENSTGRADE AKTUALISIEREN ====================
+function updateDienstgrade() {
+  const bl = elBundesland.value;
+  elDienstgrad.innerHTML = '<option value="">Bitte auswählen</option>';
+  if (!bl || !BESOLDUNG_DATA[bl]) return;
+  BESOLDUNG_DATA[bl].forEach((entry, idx) => {
+    const [dienstgrad, besGruppe, grundbezuege] = entry;
+    if (grundbezuege > 0) {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = dienstgrad.includes('(' + besGruppe + ')') ? dienstgrad : dienstgrad + ' (' + besGruppe + ')';
+      elDienstgrad.appendChild(opt);
+    }
+  });
+}
+
+// ==================== BEIHILFE-BERECHNUNG ====================
+function calcBeihilfe(bundesland, verheiratet, ehegatteBh, kinder) {
+  const result = {
+    berechtigter_ambulant: 0, berechtigter_stationaer: 0,
+    ehepartner_ambulant: 0, ehepartner_stationaer: 0,
+    kind_ambulant: 0, kind_stationaer: 0
+  };
+
+  if (bundesland === 'Bremen') {
+    const ehepartner_bh = (ehegatteBh === 'Ja' && verheiratet) ? 1 : 0;
+    const kinder_ueber_basis = kinder;
+    const zusaetzlich_bh = ehepartner_bh + kinder_ueber_basis;
+
+    const ambulant_basis = 0.50;
+    const stationaer_basis = 0.50;
+    const obergrenze_ambulant = 0.70;
+    const obergrenze_stationaer = 0.70;
+
+    result.berechtigter_ambulant = Math.min(ambulant_basis + zusaetzlich_bh * 0.05, obergrenze_ambulant);
+    result.berechtigter_stationaer = Math.min(stationaer_basis + zusaetzlich_bh * 0.05, obergrenze_stationaer);
+
+    if (verheiratet) {
+      result.ehepartner_ambulant = ambulant_basis + 0.05;
+      result.ehepartner_stationaer = stationaer_basis + 0.05;
+    }
+
+    result.kind_ambulant = result.berechtigter_ambulant;
+    result.kind_stationaer = result.berechtigter_stationaer;
+
+  } else if (bundesland === 'Hessen') {
+    const ehepartner_bh = (ehegatteBh === 'Ja' && verheiratet) ? 1 : 0;
+    const kinder_ueber_basis = kinder;
+    const zusaetzlich_bh = ehepartner_bh + kinder_ueber_basis;
+
+    const ambulant_basis = 0.50;
+    const stationaer_basis = 0.65;
+    const obergrenze_ambulant = 0.70;
+    const obergrenze_stationaer = 0.85;
+
+    result.berechtigter_ambulant = Math.min(ambulant_basis + zusaetzlich_bh * 0.05, obergrenze_ambulant);
+    result.berechtigter_stationaer = Math.min(stationaer_basis + zusaetzlich_bh * 0.05, obergrenze_stationaer);
+
+    if (verheiratet) {
+      result.ehepartner_ambulant = ambulant_basis + 0.05;
+      result.ehepartner_stationaer = stationaer_basis + 0.05;
+    }
+
+    result.kind_ambulant = result.berechtigter_ambulant;
+    result.kind_stationaer = result.berechtigter_stationaer;
+
+  } else {
+    // Standard
+    result.berechtigter_ambulant = kinder > 2 ? 0.70 : 0.50;
+    result.berechtigter_stationaer = kinder > 2 ? 0.70 : 0.50;
+
+    if (verheiratet) {
+      result.ehepartner_ambulant = 0.70;
+      result.ehepartner_stationaer = 0.70;
+    }
+
+    result.kind_ambulant = 0.80;
+    result.kind_stationaer = 0.80;
+  }
+
+  return result;
+}
+
+// ==================== HAUPTBERECHNUNG ====================
+function recalc() {
+  const bundesland = getStr('bundesland');
+  const dienstgradIdx = getStr('dienstgrad');
+  const familienstand = getStr('familienstand');
+  const kinder = parseInt(elKinder.value) || 0;
+  const ehegatteBh = getStr('ehegatte_bh');
+  const verheiratet = familienstand === 'verheiratet';
+
+  // Besoldung
+  if (!bundesland || dienstgradIdx === '' || !familienstand) {
+    document.getElementById('besoldung-output').innerHTML =
+      '<p style="color:var(--text-light);text-align:center;padding:2rem 0;">Bitte wählen Sie Bundesland, Dienstgrad und Familienstand aus.</p>';
+    document.getElementById('beihilfe-output').innerHTML =
+      '<p style="color:var(--text-light);text-align:center;padding:2rem 0;">Beihilfesätze werden nach Eingabe berechnet.</p>';
+    renderVorschlag(null, null, null);
+    renderNetto(null, null, 0);
+    return;
+  }
+
+  const entry = BESOLDUNG_DATA[bundesland][parseInt(dienstgradIdx)];
+  if (!entry) return;
+
+  const [dienstgrad, besGruppe, grundbezuege, famZuschlag, vl, lst_ledig, soli_ledig, kist_ledig, lst_verh, soli_verh, kist_verh, kvSatz_ledig, kvSatz_verh] = entry;
+
+  let brutto, steuerklasse, lohnsteuer, soli, kirchensteuer, steuerGesamt, netto, famZuschlagAnzeige;
+
+  if (verheiratet) {
+    famZuschlagAnzeige = famZuschlag;
+    brutto = grundbezuege + famZuschlag + vl;
+    steuerklasse = 'IV';
+    lohnsteuer = lst_verh;
+    soli = soli_verh;
+    kirchensteuer = kist_verh;
+  } else {
+    famZuschlagAnzeige = 0;
+    brutto = grundbezuege + vl;
+    steuerklasse = 'I';
+    lohnsteuer = lst_ledig;
+    soli = soli_ledig;
+    kirchensteuer = kist_ledig;
+  }
+  steuerGesamt = lohnsteuer + soli + kirchensteuer;
+  netto = brutto - steuerGesamt;
+  const gesetzlKVBetrag = verheiratet ? kvSatz_verh : kvSatz_ledig;
+
+  // Besoldungstabelle rendern
+  let html = `<div class="table-responsive"><table>
+    <tr><th colspan="2">Besoldungsübersicht – ${dienstgrad}</th></tr>
+    <tr><td>Besoldungsgruppe</td><td class="text-right amount">${besGruppe}</td></tr>
+    <tr><td>Grundbezüge</td><td class="text-right amount">${fmt(grundbezuege)}</td></tr>`;
+  if (verheiratet) {
+    html += `<tr><td>Familienzuschlag</td><td class="text-right amount">${fmt(famZuschlagAnzeige)}</td></tr>`;
+  }
+  html += `<tr><td>Vermögenswirksame Leistungen (VL)</td><td class="text-right amount">${fmt(vl)}</td></tr>
+    <tr class="highlight-row"><td><strong>Steuerpflichtige Bruttobezüge</strong></td><td class="text-right amount"><strong>${fmt(brutto)}</strong></td></tr>
+    <tr><td>Steuerklasse</td><td class="text-right">${steuerklasse}</td></tr>
+    <tr><td>Lohnsteuer</td><td class="text-right amount amount-negative">− ${fmt(lohnsteuer)}</td></tr>
+    <tr><td>Solidaritätszuschlag</td><td class="text-right amount amount-negative">− ${fmt(soli)}</td></tr>
+    <tr><td>Kirchensteuer (9%)</td><td class="text-right amount amount-negative">− ${fmt(kirchensteuer)}</td></tr>
+    <tr class="highlight-row"><td><strong>Steuer gesamt</strong></td><td class="text-right amount amount-negative"><strong>− ${fmt(steuerGesamt)}</strong></td></tr>
+    <tr class="highlight-row"><td><strong>Nettobezüge</strong></td><td class="text-right amount amount-positive"><strong>${fmt(netto)}</strong></td></tr>
+  </table></div>`;
+
+  document.getElementById('besoldung-output').innerHTML = html;
+
+  // Beihilfe
+  const bh = calcBeihilfe(bundesland, verheiratet, ehegatteBh, kinder);
+
+  let bhHtml = '<div class="table-responsive"><table>';
+  bhHtml += '<tr><th>Person</th><th class="text-center">Ambulant/Zahn<br>(Beihilfe)</th><th class="text-center">Stationär<br>(Beihilfe)</th><th class="text-center">Eigenanteil<br>Ambulant</th><th class="text-center">Eigenanteil<br>Stationär</th></tr>';
+  bhHtml += `<tr><td><strong>Beihilfeberechtigte/r</strong></td>
+    <td class="text-center"><span class="badge badge-success">${pct(bh.berechtigter_ambulant)}</span></td>
+    <td class="text-center"><span class="badge badge-success">${pct(bh.berechtigter_stationaer)}</span></td>
+    <td class="text-center"><span class="badge badge-warning">${pct(1 - bh.berechtigter_ambulant)}</span></td>
+    <td class="text-center"><span class="badge badge-warning">${pct(1 - bh.berechtigter_stationaer)}</span></td></tr>`;
+
+  if (verheiratet) {
+    bhHtml += `<tr><td><strong>Ehepartner/in</strong></td>
+      <td class="text-center"><span class="badge badge-success">${pct(bh.ehepartner_ambulant)}</span></td>
+      <td class="text-center"><span class="badge badge-success">${pct(bh.ehepartner_stationaer)}</span></td>
+      <td class="text-center"><span class="badge badge-warning">${pct(1 - bh.ehepartner_ambulant)}</span></td>
+      <td class="text-center"><span class="badge badge-warning">${pct(1 - bh.ehepartner_stationaer)}</span></td></tr>`;
+  }
+
+  if (kinder > 0) {
+    bhHtml += `<tr><td><strong>je Kind</strong></td>
+      <td class="text-center"><span class="badge badge-success">${pct(bh.kind_ambulant)}</span></td>
+      <td class="text-center"><span class="badge badge-success">${pct(bh.kind_stationaer)}</span></td>
+      <td class="text-center"><span class="badge badge-warning">${pct(1 - bh.kind_ambulant)}</span></td>
+      <td class="text-center"><span class="badge badge-warning">${pct(1 - bh.kind_stationaer)}</span></td></tr>`;
+  }
+  bhHtml += '</table></div>';
+
+  // Wahlleistungen
+  const wl = WAHLLEISTUNGEN[bundesland];
+  if (wl) {
+    bhHtml += `<div class="info-box" style="margin-top:1rem;">
+      <strong>🏥 Wahlleistungen im Krankenhaus:</strong> `;
+    if (wl.beihilfefaehig) {
+      bhHtml += `In ${bundesland} sind Wahlleistungen (Chefarzt, Zweibettzimmer) <strong>beihilfefähig</strong>`;
+      if (wl.hinweis) bhHtml += ` (${wl.hinweis})`;
+      bhHtml += '.';
+    } else {
+      bhHtml += `In ${bundesland} sind Wahlleistungen <strong>nicht beihilfefähig</strong>. Der gesamte Eigenanteil muss privat versichert werden.`;
+    }
+    bhHtml += '</div>';
+  }
+
+  // Ehegatten-Beihilfeberechtigung
+  if (verheiratet && EHEGATTEN_BEIHILFE[bundesland]) {
+    const eb = EHEGATTEN_BEIHILFE[bundesland];
+    bhHtml += `<div class="info-box" style="margin-top:0.75rem;">
+      <strong>ℹ️ Beihilfeberechtigung des Ehegatten (${bundesland}):</strong><br>
+      Einkommensgrenze: <strong>${eb.grenze}</strong> (Bezugszeitraum: ${eb.zeitraum}).<br>
+      Übersteigt das Einkommen des Ehegatten diese Grenze, entfällt der Beihilfeanspruch für den Ehegatten.
+      ${eb.hinweis ? '<br><em>' + eb.hinweis + '</em>' : ''}
+    </div>`;
+  }
+
+  document.getElementById('beihilfe-output').innerHTML = bhHtml;
+
+  // Versicherungsvorschlag & Netto
+  renderVorschlag(bh, bundesland, entry);
+  renderNetto(netto, brutto, gesetzlKVBetrag);
+}
+
+// ==================== VERSICHERUNGSVORSCHLAG ====================
+function renderVorschlag(bh, bundesland, entry) {
+  const container = document.getElementById('vorschlag-output');
+  if (!bh || !entry) {
+    container.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:2rem 0;">Versicherungsdaten eingeben, um den Vorschlag zu sehen.</p>';
+    return;
+  }
+
+  const duBeitrag = getVal('du_beitrag');
+  const duRente = getVal('du_rente');
+  const duLJ = getStr('du_lj');
+  const duFonds = getVal('du_fondsrente');
+  const unfallBeitrag = getVal('unfall_beitrag');
+  const unfallVoll = getVal('unfall_voll');
+  const unfallTod = getVal('unfall_tod');
+  const alterBeitrag = getVal('alter_beitrag');
+  const alterRente = getVal('alter_rente');
+  const alterTyp = getStr('alter_typ');
+  const kvBeitrag = getVal('kv_beitrag');
+  const kvTagegeld = getVal('kv_tagegeld');
+  const kvKurtagegeld = getVal('kv_kurtagegeld');
+  const haftpflichtBeitrag = getVal('haftpflicht_beitrag');
+
+  let html = '<div class="table-responsive"><table>';
+  html += '<tr><th>Bereich</th><th>Beitrag/Monat</th><th>Leistungen</th></tr>';
+
+  // DU
+  let duLeistung = '';
+  if (duRente > 0) duLeistung += `Monatliche Rente: ${fmt(duRente)}`;
+  if (duLJ) duLeistung += `${duLeistung ? '<br>' : ''}Beitragsbefreiung bis zum ${duLJ}. Lebensjahr`;
+  if (duFonds > 0) duLeistung += `${duLeistung ? '<br>' : ''}Rückzahlung Fondsrente: ${fmt(duFonds)}`;
+  if (!duLeistung) duLeistung = '–';
+  html += `<tr><td><strong>Dienstunfähigkeit</strong></td><td class="text-right amount">${fmt(duBeitrag)}</td><td>${duLeistung}</td></tr>`;
+
+  // Unfall
+  let unfallLeistung = '';
+  if (unfallVoll > 0) unfallLeistung += `Vollinvalidität: ${fmt(unfallVoll)}`;
+  if (unfallTod > 0) unfallLeistung += `${unfallLeistung ? '<br>' : ''}Unfalltod: ${fmt(unfallTod)}`;
+  if (!unfallLeistung) unfallLeistung = '–';
+  html += `<tr><td><strong>Unfall</strong></td><td class="text-right amount">${fmt(unfallBeitrag)}</td><td>${unfallLeistung}</td></tr>`;
+
+  // Alter
+  let alterLeistung = '';
+  if (alterRente > 0) {
+    if (alterTyp === 'Riester') {
+      alterLeistung = `Monatliche Riester-Rente inkl. Fondsguthaben ca. ${fmt(alterRente)}`;
+    } else {
+      alterLeistung = `Privatrente inkl. Fondsguthaben ca. ${fmt(alterRente)}`;
+    }
+  }
+  if (!alterLeistung) alterLeistung = '–';
+  html += `<tr><td><strong>Altersvorsorge (${alterTyp})</strong></td><td class="text-right amount">${fmt(alterBeitrag)}</td><td>${alterLeistung}</td></tr>`;
+
+  // KV
+  let kvLeistung = `Eigenanteil ambulant: ${pct(1 - bh.berechtigter_ambulant)}, stationär: ${pct(1 - bh.berechtigter_stationaer)}`;
+  if (kvTagegeld > 0) kvLeistung += `<br>KH-Tagegeld: ${fmt(kvTagegeld)}`;
+  if (kvKurtagegeld > 0) kvLeistung += `<br>Kurtagegeld: ${fmt(kvKurtagegeld)}`;
+  html += `<tr><td><strong>Krankenversicherung</strong></td><td class="text-right amount">${fmt(kvBeitrag)}</td><td>${kvLeistung}</td></tr>`;
+
+  // Haftpflicht
+  html += `<tr><td><strong>Privat- & Amtshaftpflicht</strong></td><td class="text-right amount">${fmt(haftpflichtBeitrag)}</td><td>Privat- und Amtshaftpflicht</td></tr>`;
+
+  const gesamtBeitrag = duBeitrag + unfallBeitrag + alterBeitrag + kvBeitrag + haftpflichtBeitrag;
+  html += `<tr class="highlight-row"><td><strong>Gesamtbeitrag Vorsorge</strong></td><td class="text-right amount"><strong>${fmt(gesamtBeitrag)}</strong></td><td></td></tr>`;
+  html += '</table></div>';
+
+  container.innerHTML = html;
+}
+
+// ==================== NETTO-BERECHNUNG ====================
+function renderNetto(netto, brutto, gesetzlKVBetrag) {
+  const container = document.getElementById('netto-output');
+  if (netto === null) {
+    container.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:2rem 0;">Netto-Berechnung erfolgt automatisch.</p>';
+    return;
+  }
+
+  const duBeitrag = getVal('du_beitrag');
+  const unfallBeitrag = getVal('unfall_beitrag');
+  const alterBeitrag = getVal('alter_beitrag');
+  const kvBeitrag = getVal('kv_beitrag');
+  const haftpflichtBeitrag = getVal('haftpflicht_beitrag');
+
+  const vorsorge = duBeitrag + unfallBeitrag + alterBeitrag + kvBeitrag + haftpflichtBeitrag;
+  const vlAnlage = 40;
+  const nettoVerfuegbar = netto - vorsorge - vlAnlage;
+  const gesetzlKV = gesetzlKVBetrag || (brutto * 0.213);
+  const kvRate = brutto > 0 ? gesetzlKV / brutto : 0.213;
+
+  let html = '<div class="summary-grid">';
+  html += `<div class="summary-item"><div class="label">Nettobezüge</div><div class="value">${fmt(netto)}</div></div>`;
+  html += `<div class="summary-item"><div class="label">Vorsorgebeitrag</div><div class="value">− ${fmt(vorsorge)}</div></div>`;
+  html += `<div class="summary-item"><div class="label">VL-Anlagebeitrag</div><div class="value">− ${fmt(vlAnlage)}</div></div>`;
+  html += `<div class="summary-item gold"><div class="label">Netto zur Verfügung</div><div class="value">${fmt(nettoVerfuegbar)}</div></div>`;
+  html += '</div>';
+
+  html += '<div class="table-responsive"><table>';
+  html += '<tr><th colspan="2">Detailberechnung</th></tr>';
+  html += `<tr><td>Nettobezüge</td><td class="text-right amount">${fmt(netto)}</td></tr>`;
+  html += `<tr><td>− Vorsorgebeitrag gesamt</td><td class="text-right amount amount-negative">− ${fmt(vorsorge)}</td></tr>`;
+  html += `<tr><td>− VL-Anlagebeitrag</td><td class="text-right amount amount-negative">− ${fmt(vlAnlage)}</td></tr>`;
+  html += `<tr class="highlight-row"><td><strong>Netto zur Verfügung</strong></td><td class="text-right amount amount-positive"><strong>${fmt(nettoVerfuegbar)}</strong></td></tr>`;
+  html += '</table></div>';
+
+  html += `<div class="info-box" style="margin-top:1rem;">
+    <strong>📊 Vergleich gesetzliche Krankenversicherung:</strong><br>
+    Bei gesetzlicher KV (Satz ${(kvRate * 100).toFixed(1)}%) müssten Sie <strong>${fmt(gesetzlKV)}</strong>/Monat als Arbeitnehmeranteil zahlen.
+    Sie sparen mit der privaten Beihilfe-KV gegenüber der gesetzlichen KV erheblich.
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+// ==================== DIAGRAMME ====================
+function drawPieChart() {
+  const canvas = document.getElementById('pieChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = 360, h = 360;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+
+  const cx = w / 2, cy = 155, r = 120;
+  let startAngle = -Math.PI / 2;
+
+  BU_RISIKO.forEach(item => {
+    const sliceAngle = item.anteil * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, startAngle, startAngle + sliceAngle);
+    ctx.closePath();
+    ctx.fillStyle = item.farbe;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Label
+    const midAngle = startAngle + sliceAngle / 2;
+    const lx = cx + (r * 0.65) * Math.cos(midAngle);
+    const ly = cy + (r * 0.65) * Math.sin(midAngle);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 11px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText((item.anteil * 100).toFixed(1) + '%', lx, ly);
+
+    startAngle += sliceAngle;
+  });
+
+  // Legende
+  let ly = 300;
+  const cols = 2;
+  const colW = w / cols;
+  BU_RISIKO.forEach((item, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const lx = 15 + col * colW;
+    const yy = ly + row * 20;
+
+    ctx.fillStyle = item.farbe;
+    ctx.fillRect(lx, yy, 12, 12);
+    ctx.fillStyle = '#1a2744';
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(item.ursache + ' (' + (item.anteil * 100).toFixed(1) + '%)', lx + 18, yy);
+  });
+}
+
+function drawBarChart() {
+  const canvas = document.getElementById('barChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = 420, h = 320;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+
+  const pad = { top: 30, right: 20, bottom: 55, left: 60 };
+  const cw = w - pad.left - pad.right;
+  const ch = h - pad.top - pad.bottom;
+
+  // Achsen
+  ctx.strokeStyle = '#d8dce6';
+  ctx.lineWidth = 1;
+
+  // Y-Achse Hilfslinien
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (ch / 4) * i;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(w - pad.right, y);
+    ctx.stroke();
+
+    ctx.fillStyle = '#5a6a85';
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(((4 - i) * 20) + '%', pad.left - 8, y);
+  }
+
+  // Balken
+  const barW = cw / VERSORGUNGSLUECKE.length * 0.7;
+  const gap = cw / VERSORGUNGSLUECKE.length;
+
+  VERSORGUNGSLUECKE.forEach((item, i) => {
+    const x = pad.left + i * gap + (gap - barW) / 2;
+    const barH = (item.luecke / 0.80) * ch;
+    const y = pad.top + ch - barH;
+
+    const grad = ctx.createLinearGradient(x, y, x, pad.top + ch);
+    if (item.luecke === 0) {
+      grad.addColorStop(0, '#2e7d32');
+      grad.addColorStop(1, '#4caf50');
+    } else {
+      grad.addColorStop(0, '#e65100');
+      grad.addColorStop(1, '#ff9800');
+    }
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
+    ctx.fill();
+
+    // Wert über Balken
+    if (item.luecke > 0) {
+      ctx.fillStyle = '#1a2744';
+      ctx.font = 'bold 10px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText((item.luecke * 100).toFixed(1) + '%', x + barW / 2, y - 3);
+    }
+
+    // X-Label
+    ctx.fillStyle = '#5a6a85';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.save();
+    ctx.translate(x + barW / 2, pad.top + ch + 8);
+    ctx.fillText(item.jahre + ' J.', 0, 0);
+    ctx.restore();
+  });
+
+  // Achsenbeschriftungen
+  ctx.fillStyle = '#1a2744';
+  ctx.font = 'bold 12px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Dienstjahre', w / 2, h - 8);
+
+  ctx.save();
+  ctx.translate(14, pad.top + ch / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Versorgungslücke', 0, 0);
+  ctx.restore();
+}
+
+// ==================== INITIALISIERUNG ====================
+document.getElementById('year').textContent = new Date().getFullYear();
+drawPieChart();
+drawBarChart();
+recalc();
+</script>
+
+</body>
+</html>
