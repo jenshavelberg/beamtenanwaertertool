@@ -1,10 +1,11 @@
 """
 Update Hessen Besoldungsdaten with new values from Dec 2025 PDF.
 Uses 2025 ESt formula (§32a EStG, Inflationsausgleichsgesetz).
-Reads original data from besoldung_compact_v2.json (restored from index.html).
+Run from project root: python scripts/update_hessen_v2.py
 """
 import json
 import math
+from pathlib import Path
 
 # ── 2025 Einkommensteuer-Formel (§ 32a EStG) ──
 def est_2025(zve):
@@ -48,8 +49,10 @@ VL = 6.65
 KIRCHENSTEUER_RATE = 0.09  # Hessen: 9%
 KV_RATE = 0.213  # GKV-Vergleichssatz
 
+ROOT = Path(__file__).resolve().parent.parent
+
 # Load original data
-with open('besoldung_compact_v2.json', 'r') as f:
+with open(ROOT / 'data' / 'besoldung_compact_v2.json', 'r') as f:
     data = json.load(f)
 
 # ── First: Calibration check on OLD data ──
@@ -131,7 +134,7 @@ data['Hessen'] = new_hessen
 
 # Write
 result = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
-with open('besoldung_compact_v2.json', 'w') as f:
+with open(ROOT / 'data' / 'besoldung_compact_v2.json', 'w') as f:
     f.write(result)
 
 print(f"besoldung_compact_v2.json aktualisiert ({len(result)} chars)")

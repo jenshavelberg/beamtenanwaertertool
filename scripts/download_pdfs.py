@@ -1,6 +1,8 @@
 import requests, os
+from pathlib import Path
 
-os.makedirs('pdfs', exist_ok=True)
+ROOT = Path(__file__).resolve().parent.parent
+os.makedirs(ROOT / 'pdfs', exist_ok=True)
 
 base = 'https://www.dbb.de'
 pdfs = {
@@ -25,7 +27,7 @@ pdfs = {
 
 for name, path in pdfs.items():
     url = base + path
-    fname = f'pdfs/{name}.pdf'
+    fname = ROOT / 'pdfs' / f'{name}.pdf'
     if not os.path.exists(fname):
         r = requests.get(url, timeout=30)
         if r.status_code == 200:

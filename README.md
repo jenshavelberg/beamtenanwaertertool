@@ -2,7 +2,7 @@
 
 Interaktives Web-Tool zur Vorsorgeanalyse für Beamtenanwärter in Deutschland. Berechnet Besoldung, Beihilfeansprüche, Versorgungslücken und Versicherungsbedarf – für alle 16 Bundesländer und den Bund.
 
-**[→ Live-Demo](https://jens.github.io/beamtenanwaertertool/)**
+**[→ Live-Demo](https://jenshavelberg.github.io/beamtenanwaertertool/)**
 
 ## Features
 
@@ -12,25 +12,21 @@ Interaktives Web-Tool zur Vorsorgeanalyse für Beamtenanwärter in Deutschland. 
 - Handlungsempfehlungen für Versicherungsprodukte
 - Responsive Design – funktioniert auf Desktop und Mobil
 
-## Technik
+## Projektstruktur
 
-Statische Single-Page-Anwendung – reines HTML/CSS/JavaScript, keine Build-Tools nötig.
+```
+├── index.html              # Die komplette Web-App (standalone)
+├── data/
+│   └── besoldung_compact_v2.json  # Besoldungsdaten (Zwischen-Datei für Updates)
+├── scripts/
+│   ├── download_pdfs.py    # Lädt Besoldungstabellen-PDFs herunter
+│   ├── update_hessen_v2.py # Aktualisiert Hessen-Daten (Template für andere BL)
+│   └── update_index_html.py # Schreibt aktualisierte Daten in index.html
+├── LOGIK.md                # Dokumentation der Berechnungslogik
+└── .github/workflows/      # GitHub Pages Deployment
+```
 
-| Datei | Beschreibung |
-|---|---|
-| `index.html` | Die komplette Web-App |
-| `besoldung_compact_v2.json` | Besoldungsdaten aller Bundesländer (kompakt) |
-| `LOGIK.md` | Vollständige Dokumentation der Berechnungslogik |
-
-### Hilfsskripte (Python)
-
-| Skript | Beschreibung |
-|---|---|
-| `download_pdfs.py` | Lädt Besoldungstabellen als PDF herunter |
-| `extract_data.py` | Extrahiert Daten aus den PDFs |
-| `compact_data_v2.py` | Komprimiert die Rohdaten |
-| `update_hessen_v2.py` | Aktualisiert Hessen-spezifische Daten |
-| `update_index_html.py` | Bettet Besoldungsdaten in index.html ein |
+Die Besoldungsdaten sind direkt in `index.html` eingebettet – keine externen Abhängigkeiten zur Laufzeit.
 
 ## Lokale Entwicklung
 
@@ -42,10 +38,14 @@ python3 -m http.server 8000
 ## Daten aktualisieren
 
 ```bash
-python3 download_pdfs.py
-python3 extract_data.py
-python3 compact_data_v2.py
-python3 update_index_html.py
+# 1. Neue PDFs herunterladen
+python3 scripts/download_pdfs.py
+
+# 2. Bundesland-Daten aktualisieren (z.B. Hessen)
+python3 scripts/update_hessen_v2.py
+
+# 3. Aktualisierte Daten in index.html einbetten
+python3 scripts/update_index_html.py
 ```
 
 ## Lizenz

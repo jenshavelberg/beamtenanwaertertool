@@ -1,15 +1,20 @@
-"""Replace BESOLDUNG_DATA in index.html with updated JSON."""
+"""Replace BESOLDUNG_DATA in index.html with updated JSON.
+Run from project root: python scripts/update_index_html.py
+"""
 import json, re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
 
 # Read updated data
-with open('besoldung_compact_v2.json', 'r') as f:
+with open(ROOT / 'data' / 'besoldung_compact_v2.json', 'r') as f:
     data = json.load(f)
 
 # Create compact JSON string (matching original format)
 new_json = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
 
 # Read index.html
-with open('index.html', 'r') as f:
+with open(ROOT / 'index.html', 'r') as f:
     html = f.read()
 
 # Replace BESOLDUNG_DATA assignment
@@ -18,7 +23,7 @@ replacement = f'\\1{new_json};'
 new_html, count = re.subn(pattern, replacement, html, count=1, flags=re.DOTALL)
 
 if count == 1:
-    with open('index.html', 'w') as f:
+    with open(ROOT / 'index.html', 'w') as f:
         f.write(new_html)
     print(f"index.html aktualisiert (BESOLDUNG_DATA ersetzt)")
     
