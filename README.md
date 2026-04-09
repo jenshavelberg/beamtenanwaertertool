@@ -2,7 +2,7 @@
 
 Interaktives Web-Tool zur Vorsorgeanalyse für Beamtenanwärter in Deutschland. Berechnet Besoldung, Beihilfeansprüche, Versorgungslücken und Versicherungsbedarf – für alle 16 Bundesländer und den Bund.
 
-**[→ Live-Demo](https://jenshavelberg.github.io/beamtenanwaertertool/)**
+**[→ Live-Demo](https://vfm.github.io/beamtenanwaertertool/)**
 
 ## Features
 
