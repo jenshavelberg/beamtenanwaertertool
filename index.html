@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beamtenanwärter-Tool – Vorsorgeanalyse</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+
 :root {
-  --primary: #1a2744;
-  --primary-light: #2c3e6b;
-  --primary-lighter: #3d5a99;
+  --primary: #16233f;
+  --primary-light: #253961;
+  --primary-lighter: #334f84;
   --accent: #c9a84c;
   --accent-light: #e0c76e;
-  --bg: #f0f2f5;
+  --bg: #f7f9fc;
   --card-bg: #ffffff;
   --text: #1a2744;
   --text-light: #5a6a85;
@@ -19,48 +21,37 @@
   --success: #2e7d32;
   --warning: #e65100;
   --info: #0277bd;
-  --radius: 12px;
-  --shadow: 0 2px 12px rgba(26,39,68,0.08);
-  --shadow-lg: 0 8px 32px rgba(26,39,68,0.12);
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(17, 24, 39, 0.08);
+  --shadow-lg: 0 6px 18px rgba(17, 24, 39, 0.10);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
 }
 .header {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  background: #18294a;
   color: #fff;
-  padding: 2rem 1.5rem;
+  padding: 1.4rem 1.5rem;
   text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%);
-  border-radius: 50%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 .header h1 {
-  font-size: 1.75rem;
+  font-family: 'IBM Plex Mono', 'Source Sans 3', monospace;
+  font-size: 1.55rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
-  position: relative;
+  letter-spacing: 0.02em;
 }
 .header h1 span { color: var(--accent); }
 .header p {
-  margin-top: 0.5rem;
-  opacity: 0.8;
-  font-size: 0.95rem;
-  position: relative;
+  font-family: 'IBM Plex Mono', 'Source Sans 3', monospace;
+  margin-top: 0.35rem;
+  opacity: 0.78;
+  font-size: 0.88rem;
 }
 .container {
   max-width: 1100px;
@@ -73,20 +64,22 @@ body {
   box-shadow: var(--shadow);
   margin-bottom: 1.5rem;
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid #d7dde8;
 }
 .card-header {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  font-family: 'Sora', 'Source Sans 3', sans-serif;
+  background: #1f3359;
   color: #fff;
-  padding: 1rem 1.5rem;
-  font-size: 1.05rem;
-  font-weight: 600;
+  padding: 0.9rem 1.2rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 .card-header .icon { font-size: 1.2rem; }
-.card-body { padding: 1.5rem; }
+.card-body { padding: 1.2rem; }
 .form-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -101,17 +94,17 @@ body {
 }
 .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
 .form-group label {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.79rem;
+  font-weight: 700;
   color: var(--text-light);
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.45px;
 }
 .form-group input,
 .form-group select {
-  padding: 0.6rem 0.75rem;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
+  padding: 0.58rem 0.72rem;
+  border: 1px solid #c9d3e3;
+  border-radius: 7px;
   font-size: 0.95rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   background: #fff;
@@ -120,18 +113,19 @@ body {
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  border-color: #9db4da;
+  box-shadow: 0 0 0 2px rgba(157, 180, 218, 0.22);
 }
 .form-group input[type="number"] { -moz-appearance: textfield; }
 .form-group input[type="number"]::-webkit-outer-spin-button,
 .form-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
 .ins-section-title {
+  font-family: 'Sora', 'Source Sans 3', sans-serif;
   font-weight: 700;
-  color: var(--primary);
-  font-size: 0.9rem;
-  padding: 0.75rem 0 0.25rem;
-  border-bottom: 2px solid var(--accent);
+  color: #223a66;
+  font-size: 0.88rem;
+  padding: 0.65rem 0 0.3rem;
+  border-bottom: 1px solid #c3cfdf;
   margin-bottom: 0.5rem;
   grid-column: 1 / -1;
 }
@@ -141,14 +135,14 @@ table {
   font-size: 0.9rem;
 }
 table th {
-  background: var(--primary);
+  background: #243a67;
   color: #fff;
   padding: 0.65rem 0.75rem;
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.45px;
 }
 table td {
   padding: 0.55rem 0.75rem;
@@ -156,7 +150,7 @@ table td {
 }
 table tr:last-child td { border-bottom: none; }
 table tr:nth-child(even) { background: #f8f9fc; }
-.highlight-row { background: linear-gradient(90deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.05) 100%) !important; font-weight: 700; }
+.highlight-row { background: #f5f8ff !important; font-weight: 700; }
 .highlight-row td { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent) !important; }
 .text-right { text-align: right; }
 .text-center { text-align: center; }
@@ -174,19 +168,19 @@ table tr:nth-child(even) { background: #f8f9fc; }
 .badge-warning { background: #fff3e0; color: var(--warning); }
 .badge-info { background: #e1f5fe; color: var(--info); }
 .info-box {
-  background: linear-gradient(135deg, #e1f5fe 0%, #f0f7ff 100%);
-  border-left: 4px solid var(--info);
+  background: #eef5fc;
+  border-left: 3px solid var(--info);
   padding: 1rem 1.25rem;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 6px 6px 0;
   margin: 1rem 0;
   font-size: 0.9rem;
 }
 .info-box strong { color: var(--info); }
 .warning-box {
-  background: linear-gradient(135deg, #fff3e0 0%, #fffaf0 100%);
-  border-left: 4px solid var(--warning);
+  background: #fff4ea;
+  border-left: 3px solid var(--warning);
   padding: 1rem 1.25rem;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 6px 6px 0;
   margin: 1rem 0;
   font-size: 0.9rem;
 }
@@ -208,6 +202,17 @@ table tr:nth-child(even) { background: #f8f9fc; }
   color: var(--primary);
   margin-bottom: 0.75rem;
 }
+.chart-note {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+.chart-source-note {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
 canvas { max-width: 100%; height: auto; }
 .summary-grid {
   display: grid;
@@ -216,9 +221,9 @@ canvas { max-width: 100%; height: auto; }
   margin: 1rem 0;
 }
 .summary-item {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  background: #20355d;
   color: #fff;
-  padding: 1.25rem;
+  padding: 1.05rem;
   border-radius: var(--radius);
   text-align: center;
 }
@@ -229,15 +234,74 @@ canvas { max-width: 100%; height: auto; }
   opacity: 0.8;
 }
 .summary-item .value {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   margin-top: 0.25rem;
   color: var(--accent-light);
 }
 .summary-item.gold {
-  background: linear-gradient(135deg, var(--accent) 0%, #b8952e 100%);
+  background: #b8952e;
 }
 .summary-item.gold .value { color: #fff; }
+.action-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 1rem;
+}
+.btn {
+  border: none;
+  border-radius: 7px;
+  padding: 0.7rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+.btn-primary {
+  background: #b8952e;
+  color: #fff;
+}
+.contact-card {
+  background: #f5f8fd;
+  border: 1px solid #d7e3fb;
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
+.contact-card-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.6rem;
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+.contact-item {
+  min-width: 0;
+}
+.contact-item .label {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.35px;
+  margin-bottom: 0.15rem;
+}
+.contact-item .value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-word;
+}
+.print-only { display: none !important; }
 .hidden { display: none !important; }
 .section-divider {
   height: 3px;
@@ -263,10 +327,14 @@ canvas { max-width: 100%; height: auto; }
   table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .form-group input, .form-group select { border: 1px solid #999; }
   .no-print { display: none !important; }
+  .action-bar { display: none !important; }
+  .print-only { display: block !important; }
   .chart-container { page-break-inside: avoid; }
   canvas { max-width: 300px; }
   .summary-item { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .highlight-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .contact-card { background: #f7f9fc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .footer { display: none !important; }
 }
 </style>
 </head>
@@ -278,6 +346,10 @@ canvas { max-width: 100%; height: auto; }
 </div>
 
 <div class="container">
+
+  <div id="print-kontakt" class="print-only" style="margin-bottom:0.75rem;">
+    <div id="print-kontakt-output"></div>
+  </div>
 
   <!-- Section 1: Persönliche Daten -->
   <div class="card">
@@ -297,6 +369,13 @@ canvas { max-width: 100%; height: auto; }
           <select id="bundesland"><option value="">Bitte auswählen</option></select>
         </div>
         <div class="form-group">
+          <label>Bundesbeihilfe</label>
+          <select id="bundesbeihilfe">
+            <option value="Nein" selected>Nein</option>
+            <option value="Ja">Ja</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Dienstgrad</label>
           <select id="dienstgrad"><option value="">Bitte zuerst Bundesland wählen</option></select>
         </div>
@@ -306,6 +385,13 @@ canvas { max-width: 100%; height: auto; }
             <option value="">Bitte auswählen</option>
             <option value="ledig">ledig</option>
             <option value="verheiratet">verheiratet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Kirchenzugehörigkeit</label>
+          <select id="kirchenzugehoerigkeit">
+            <option value="Ja" selected>Ja</option>
+            <option value="Nein">Nein</option>
           </select>
         </div>
         <div class="form-group" id="ehegatte-group" style="display:none">
@@ -329,6 +415,30 @@ canvas { max-width: 100%; height: auto; }
     </div>
   </div>
 
+  <div class="card no-print">
+    <div class="card-header"><span class="icon">📇</span> KP Kontaktdaten</div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>KP Name</label>
+          <input type="text" id="kp_name" placeholder="Vor- und Nachname Ansprechpartner">
+        </div>
+        <div class="form-group">
+          <label>KP Firma</label>
+          <input type="text" id="kp_firma" placeholder="Firma / Agentur">
+        </div>
+        <div class="form-group">
+          <label>KP Telefon</label>
+          <input type="text" id="kp_telefon" placeholder="Telefonnummer">
+        </div>
+        <div class="form-group">
+          <label>KP E-Mail</label>
+          <input type="email" id="kp_email" placeholder="E-Mail-Adresse">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Section 2: Versicherungsvorschlag Eingabe -->
   <div class="card no-print">
     <div class="card-header"><span class="icon">🛡️</span> Versicherungsvorschlag – Eingabe</div>
@@ -336,11 +446,24 @@ canvas { max-width: 100%; height: auto; }
       <div class="form-grid form-grid-3">
         <div class="ins-section-title">Dienstunfähigkeit</div>
         <div class="form-group">
-          <label>Beitrag (€/Monat)</label>
+          <label>Monatsbeitrag (€)</label>
           <input type="number" id="du_beitrag" min="0" step="0.01" value="0">
         </div>
         <div class="form-group">
-          <label>Monatsrente (€)</label>
+          <label>Jahre erhöhte Rente (0 = keine)</label>
+          <input type="number" id="du_erhoet_jahre" min="0" max="15" step="1" value="0">
+        </div>
+        <div class="form-group" id="du-rente-erhoet-group" style="display:none;">
+          <label id="du-rente-erhoet-label">Rente erste X Jahre (€)</label>
+          <input type="number" id="du_rente_erhoet" min="0" step="0.01" value="0">
+        </div>
+        <div id="du-dap-hinweis" class="full-width" style="display:none; padding-bottom:0.4rem;">
+          <div class="info-box" style="margin:0; font-size:0.82rem;">
+            Hinweis (relevant bei DAP): Bei vorzeitiger Verbeamtung auf Lebenszeit muss die Umstellung auf die Rente ab Verbeamtung aktiv beim Versicherer gemeldet werden.
+          </div>
+        </div>
+        <div class="form-group">
+          <label id="du-rente-label">Monatsrente (€)</label>
           <input type="number" id="du_rente" min="0" step="0.01" value="0">
         </div>
         <div class="form-group">
@@ -356,9 +479,18 @@ canvas { max-width: 100%; height: auto; }
             <option value="67">67</option>
           </select>
         </div>
-        <div class="form-group">
+        <div class="form-group full-width" style="display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:0.55rem;width:100%;padding-left:0.25rem;text-align:left;">
+          <input type="checkbox" id="du_fonds_option" style="width:18px;height:18px;accent-color:var(--secondary);">
+          <label for="du_fonds_option" style="margin:0;">Koppelung mit Fondsrente berücksichtigen (optional)</label>
+        </div>
+        <div class="form-group" id="du-fondsrente-group" style="display:none;">
           <label>Rückzahlung Fondsrente (€)</label>
           <input type="number" id="du_fondsrente" min="0" step="0.01" value="0">
+        </div>
+        <div id="du-fonds-hinweis" class="full-width" style="display:none;">
+          <div class="info-box" style="margin:0; font-size:0.82rem;">
+            Hinweis: Die Rückzahlung Fondsrente basiert auf einer angenommenen durchschnittlichen Performance von 6 % p.a. brutto über die Gesamtlaufzeit.
+          </div>
         </div>
 
         <div class="ins-section-title">Unfall</div>
@@ -371,7 +503,7 @@ canvas { max-width: 100%; height: auto; }
           <input type="number" id="unfall_voll" min="0" step="0.01" value="0">
         </div>
         <div class="form-group">
-          <label>Unfalltod (€)</label>
+          <label>Unfalltod / Übergangsleistung (€)</label>
           <input type="number" id="unfall_tod" min="0" step="0.01" value="0">
         </div>
 
@@ -454,6 +586,7 @@ canvas { max-width: 100%; height: auto; }
           <canvas id="barChart" width="420" height="320"></canvas>
         </div>
       </div>
+      <p class="chart-source-note">Stand: 25.04.2025</p>
     </div>
   </div>
 
@@ -475,6 +608,10 @@ canvas { max-width: 100%; height: auto; }
         <p style="color:var(--text-light);text-align:center;padding:2rem 0;">Netto-Berechnung erfolgt automatisch.</p>
       </div>
     </div>
+  </div>
+
+  <div class="action-bar no-print">
+    <button type="button" id="print_pdf" class="btn btn-primary">PDF drucken</button>
   </div>
 
 </div>
@@ -528,6 +665,35 @@ const EHEGATTEN_BEIHILFE = {
   "Bundesbeihilfe": { grenze: "17.000 €", zeitraum: "vorletztes KJ" },
 };
 
+// ==================== GKV-KONFIGURATION (jährlich anpassen) ====================
+// Quelle: GKV-Spitzenverband (www.gkv-spitzenverband.de)
+const GKV_KONFIGURATION = {
+  jahr: 2026,
+  halberAllgemeinerBeitragssatz: 0.073,   // 7,3 % (halber allgemeiner Beitragssatz 14,6 %)
+  durchschnittlicherZusatzbeitrag: 0.029, // 2,9 % (durchschnittlicher Zusatzbeitrag 2026)
+  get gesamtArbeitnehmerSatz() { return this.halberAllgemeinerBeitragssatz + this.durchschnittlicherZusatzbeitrag; },
+};
+
+const KIRCHENSTEUER_SATZ = {
+  "Baden-Württemberg": 0.08,
+  "Bayern": 0.08,
+  "Berlin": 0.09,
+  "Brandenburg": 0.09,
+  "Bremen": 0.09,
+  "Hamburg": 0.09,
+  "Hessen": 0.09,
+  "Mecklenburg-Vorpommern": 0.09,
+  "Niedersachsen": 0.09,
+  "Nordrhein-Westfalen": 0.09,
+  "Rheinland-Pfalz": 0.09,
+  "Saarland": 0.09,
+  "Sachsen": 0.09,
+  "Sachsen-Anhalt": 0.09,
+  "Schleswig-Holstein": 0.09,
+  "Thüringen": 0.09,
+  "Bundesbeihilfe": 0.08,
+};
+
 const BU_RISIKO = [
   { ursache: "Nervenkrankheiten", anteil: 0.3152, farbe: "#e74c3c" },
   { ursache: "Motorische Erkrankungen", anteil: 0.2102, farbe: "#3498db" },
@@ -570,14 +736,21 @@ function getStr(id) {
 
 // ==================== DOM REFERENZEN ====================
 const elBundesland = document.getElementById('bundesland');
+const elBundesbeihilfe = document.getElementById('bundesbeihilfe');
 const elDienstgrad = document.getElementById('dienstgrad');
 const elFamilienstand = document.getElementById('familienstand');
+const elKirchenzugehoerigkeit = document.getElementById('kirchenzugehoerigkeit');
 const elEhegatteGroup = document.getElementById('ehegatte-group');
 const elEhegatteBh = document.getElementById('ehegatte_bh');
 const elKinder = document.getElementById('kinder');
+const elPrintPdf = document.getElementById('print_pdf');
+
+function getAktivesBesoldungsgebiet() {
+  return elBundesbeihilfe.value === 'Ja' ? 'Bundesbeihilfe' : elBundesland.value;
+}
 
 // ==================== BUNDESLAND-DROPDOWN FÜLLEN ====================
-const bundeslaender = Object.keys(BESOLDUNG_DATA);
+const bundeslaender = Object.keys(BESOLDUNG_DATA).filter(bl => bl !== 'Bundesbeihilfe');
 bundeslaender.forEach(bl => {
   const opt = document.createElement('option');
   opt.value = bl;
@@ -587,26 +760,99 @@ bundeslaender.forEach(bl => {
 
 // ==================== EVENT LISTENER ====================
 elBundesland.addEventListener('change', () => { updateDienstgrade(); recalc(); });
+elBundesbeihilfe.addEventListener('change', () => {
+  const usesBundesbeihilfe = elBundesbeihilfe.value === 'Ja';
+  elBundesland.disabled = usesBundesbeihilfe;
+  if (usesBundesbeihilfe) {
+    elBundesland.value = '';
+  }
+  updateDienstgrade();
+  recalc();
+});
 elDienstgrad.addEventListener('change', recalc);
 elFamilienstand.addEventListener('change', () => {
   elEhegatteGroup.style.display = elFamilienstand.value === 'verheiratet' ? '' : 'none';
   recalc();
 });
+elKirchenzugehoerigkeit.addEventListener('change', recalc);
 elEhegatteBh.addEventListener('change', recalc);
 elKinder.addEventListener('change', recalc);
 
 // Versicherungsfelder
-['du_beitrag','du_rente','du_lj','du_fondsrente','unfall_beitrag','unfall_voll','unfall_tod',
+['du_beitrag','du_rente','du_rente_erhoet','du_erhoet_jahre','du_lj','du_fondsrente','unfall_beitrag','unfall_voll','unfall_tod',
  'alter_beitrag','alter_rente','alter_typ','kv_beitrag','kv_tagegeld','kv_kurtagegeld','haftpflicht_beitrag']
 .forEach(id => document.getElementById(id).addEventListener('change', recalc));
-['du_beitrag','du_rente','du_fondsrente','unfall_beitrag','unfall_voll','unfall_tod',
+['du_beitrag','du_rente','du_rente_erhoet','du_erhoet_jahre','du_fondsrente','unfall_beitrag','unfall_voll','unfall_tod',
  'alter_beitrag','alter_rente','kv_beitrag','kv_tagegeld','kv_kurtagegeld','haftpflicht_beitrag']
 .forEach(id => document.getElementById(id).addEventListener('input', recalc));
+['change', 'input'].forEach(evt => document.getElementById('du_erhoet_jahre').addEventListener(evt, () => { updateDuJahre(); recalc(); }));
+document.getElementById('du_fonds_option').addEventListener('change', () => { updateDuFondsOption(); recalc(); });
+['name','geburtsdatum','kp_name','kp_telefon','kp_email','kp_firma']
+.forEach(id => {
+  document.getElementById(id).addEventListener('input', renderKontaktkarte);
+  document.getElementById(id).addEventListener('change', renderKontaktkarte);
+});
+elPrintPdf.addEventListener('click', () => {
+  renderKontaktkarte();
+  recalc();
+  requestAnimationFrame(() => window.print());
+});
+window.addEventListener('beforeprint', () => {
+  renderKontaktkarte();
+});
 
 // ==================== DIENSTGRADE AKTUALISIEREN ====================
+// ==================== DU-JAHRE UMSCHALTEN ====================
+function updateDuJahre() {
+  const jahre = getVal('du_erhoet_jahre');
+  document.getElementById('du-rente-erhoet-group').style.display = jahre > 0 ? '' : 'none';
+  document.getElementById('du-dap-hinweis').style.display = jahre > 0 ? '' : 'none';
+  if (jahre > 0) {
+    document.getElementById('du-rente-erhoet-label').textContent = `Rente erste ${Math.round(jahre)} Jahre (€)`;
+    document.getElementById('du-rente-label').textContent = `Monatsrente ab Verbeamtung (€)`;
+  } else {
+    document.getElementById('du-rente-label').textContent = `Monatsrente (€)`;
+  }
+}
+
+function updateDuFondsOption() {
+  const enabled = document.getElementById('du_fonds_option').checked;
+  document.getElementById('du-fondsrente-group').style.display = enabled ? '' : 'none';
+  document.getElementById('du-fonds-hinweis').style.display = enabled ? '' : 'none';
+}
+
+function renderKontaktkarte() {
+  const kundeName = getStr('name');
+  const geburtsdatum = getStr('geburtsdatum');
+  const kpName = getStr('kp_name');
+  const kpTelefon = getStr('kp_telefon');
+  const kpEmail = getStr('kp_email');
+  const kpFirma = getStr('kp_firma');
+
+  const hasKontakt = [kundeName, geburtsdatum, kpName, kpTelefon, kpEmail, kpFirma].some(Boolean);
+  const printContainer = document.getElementById('print-kontakt-output');
+
+  if (!hasKontakt) {
+    printContainer.innerHTML = '';
+    return;
+  }
+
+  const items = [
+    kundeName ? `<div class="contact-item"><span class="label">Kunde</span><span class="value">${kundeName}</span></div>` : '',
+    geburtsdatum ? `<div class="contact-item"><span class="label">Geburtsdatum</span><span class="value">${new Date(geburtsdatum).toLocaleDateString('de-DE')}</span></div>` : '',
+    kpName ? `<div class="contact-item"><span class="label">KP Name</span><span class="value">${kpName}</span></div>` : '',
+    kpFirma ? `<div class="contact-item"><span class="label">KP Firma</span><span class="value">${kpFirma}</span></div>` : '',
+    kpTelefon ? `<div class="contact-item"><span class="label">KP Telefon</span><span class="value">${kpTelefon}</span></div>` : '',
+    kpEmail ? `<div class="contact-item"><span class="label">KP E-Mail</span><span class="value">${kpEmail}</span></div>` : '',
+  ].filter(Boolean).join('');
+
+  const html = `<div class="contact-card"><div class="contact-card-title">Kontaktdaten für Ausdruck</div><div class="contact-grid">${items}</div></div>`;
+  printContainer.innerHTML = html;
+}
+
 function updateDienstgrade() {
-  const bl = elBundesland.value;
-  elDienstgrad.innerHTML = '<option value="">Bitte auswählen</option>';
+  const bl = getAktivesBesoldungsgebiet();
+  elDienstgrad.innerHTML = `<option value="">${elBundesbeihilfe.value === 'Ja' ? 'Bitte auswählen (Bundesbeihilfe)' : 'Bitte auswählen'}</option>`;
   if (!bl || !BESOLDUNG_DATA[bl]) return;
   BESOLDUNG_DATA[bl].forEach((entry, idx) => {
     const [dienstgrad, besGruppe, grundbezuege] = entry;
@@ -688,30 +934,39 @@ function calcBeihilfe(bundesland, verheiratet, ehegatteBh, kinder) {
 
 // ==================== HAUPTBERECHNUNG ====================
 function recalc() {
-  const bundesland = getStr('bundesland');
+  renderKontaktkarte();
+  const selectedBundesland = getStr('bundesland');
+  const usesBundesbeihilfe = getStr('bundesbeihilfe') === 'Ja';
+  const bundesland = usesBundesbeihilfe ? 'Bundesbeihilfe' : selectedBundesland;
   const dienstgradIdx = getStr('dienstgrad');
   const familienstand = getStr('familienstand');
+  const kirchenzugehoerig = getStr('kirchenzugehoerigkeit') === 'Ja';
   const kinder = parseInt(elKinder.value) || 0;
   const ehegatteBh = getStr('ehegatte_bh');
   const verheiratet = familienstand === 'verheiratet';
+  const duRente = getVal('du_rente');
+  const duRenteErhoet = getVal('du_rente_erhoet');
+  const duErhoetJahre = getVal('du_erhoet_jahre');
 
   // Besoldung
-  if (!bundesland || dienstgradIdx === '' || !familienstand) {
+  if ((!usesBundesbeihilfe && !selectedBundesland) || dienstgradIdx === '' || !familienstand) {
     document.getElementById('besoldung-output').innerHTML =
-      '<p style="color:var(--text-light);text-align:center;padding:2rem 0;">Bitte wählen Sie Bundesland, Dienstgrad und Familienstand aus.</p>';
+      '<p style="color:var(--text-light);text-align:center;padding:2rem 0;">Bitte wählen Sie Bundesland oder Bundesbeihilfe, Dienstgrad und Familienstand aus.</p>';
     document.getElementById('beihilfe-output').innerHTML =
       '<p style="color:var(--text-light);text-align:center;padding:2rem 0;">Beihilfesätze werden nach Eingabe berechnet.</p>';
     renderVorschlag(null, null, null);
     renderNetto(null, null, 0);
+    drawPieChart();
+    drawBarChart(0, 0, 0);
     return;
   }
 
   const entry = BESOLDUNG_DATA[bundesland][parseInt(dienstgradIdx)];
   if (!entry) return;
 
-  const [dienstgrad, besGruppe, grundbezuege, famZuschlag, vl, lst_ledig, soli_ledig, kist_ledig, lst_verh, soli_verh, kist_verh, kvSatz_ledig, kvSatz_verh] = entry;
+  const [dienstgrad, besGruppe, grundbezuege, famZuschlag, vl, lst_ledig, soli_ledig, _kist_ledig, lst_verh, soli_verh, _kist_verh, kvSatz_ledig, kvSatz_verh] = entry;
 
-  let brutto, steuerklasse, lohnsteuer, soli, kirchensteuer, steuerGesamt, netto, famZuschlagAnzeige;
+  let brutto, steuerklasse, lohnsteuer, soli, steuerGesamt, netto, famZuschlagAnzeige;
 
   if (verheiratet) {
     famZuschlagAnzeige = famZuschlag;
@@ -719,15 +974,15 @@ function recalc() {
     steuerklasse = 'IV';
     lohnsteuer = lst_verh;
     soli = soli_verh;
-    kirchensteuer = kist_verh;
   } else {
     famZuschlagAnzeige = 0;
     brutto = grundbezuege + vl;
     steuerklasse = 'I';
     lohnsteuer = lst_ledig;
     soli = soli_ledig;
-    kirchensteuer = kist_ledig;
   }
+  const kirchensteuerSatz = kirchenzugehoerig ? (KIRCHENSTEUER_SATZ[bundesland] || 0.09) : 0;
+  const kirchensteuer = lohnsteuer * kirchensteuerSatz;
   steuerGesamt = lohnsteuer + soli + kirchensteuer;
   netto = brutto - steuerGesamt;
   const gesetzlKVBetrag = verheiratet ? kvSatz_verh : kvSatz_ledig;
@@ -745,7 +1000,7 @@ function recalc() {
     <tr><td>Steuerklasse</td><td class="text-right">${steuerklasse}</td></tr>
     <tr><td>Lohnsteuer</td><td class="text-right amount amount-negative">− ${fmt(lohnsteuer)}</td></tr>
     <tr><td>Solidaritätszuschlag</td><td class="text-right amount amount-negative">− ${fmt(soli)}</td></tr>
-    <tr><td>Kirchensteuer (9%)</td><td class="text-right amount amount-negative">− ${fmt(kirchensteuer)}</td></tr>
+    <tr><td>Kirchensteuer (${(kirchensteuerSatz * 100).toFixed(0)}%)</td><td class="text-right amount amount-negative">− ${fmt(kirchensteuer)}</td></tr>
     <tr class="highlight-row"><td><strong>Steuer gesamt</strong></td><td class="text-right amount amount-negative"><strong>− ${fmt(steuerGesamt)}</strong></td></tr>
     <tr class="highlight-row"><td><strong>Nettobezüge</strong></td><td class="text-right amount amount-positive"><strong>${fmt(netto)}</strong></td></tr>
   </table></div>`;
@@ -811,6 +1066,8 @@ function recalc() {
   // Versicherungsvorschlag & Netto
   renderVorschlag(bh, bundesland, entry);
   renderNetto(netto, brutto, gesetzlKVBetrag);
+  drawPieChart();
+  drawBarChart(netto, brutto, duRente, duRenteErhoet, duErhoetJahre);
 }
 
 // ==================== VERSICHERUNGSVORSCHLAG ====================
@@ -824,7 +1081,8 @@ function renderVorschlag(bh, bundesland, entry) {
   const duBeitrag = getVal('du_beitrag');
   const duRente = getVal('du_rente');
   const duLJ = getStr('du_lj');
-  const duFonds = getVal('du_fondsrente');
+  const duFondsOption = document.getElementById('du_fonds_option').checked;
+  const duFondsrente = getVal('du_fondsrente');
   const unfallBeitrag = getVal('unfall_beitrag');
   const unfallVoll = getVal('unfall_voll');
   const unfallTod = getVal('unfall_tod');
@@ -841,16 +1099,26 @@ function renderVorschlag(bh, bundesland, entry) {
 
   // DU
   let duLeistung = '';
-  if (duRente > 0) duLeistung += `Monatliche Rente: ${fmt(duRente)}`;
-  if (duLJ) duLeistung += `${duLeistung ? '<br>' : ''}Beitragsbefreiung bis zum ${duLJ}. Lebensjahr`;
-  if (duFonds > 0) duLeistung += `${duLeistung ? '<br>' : ''}Rückzahlung Fondsrente: ${fmt(duFonds)}`;
+  const duErhoetJahre = getVal('du_erhoet_jahre') || 0;
+  const duRenteErhoet = getVal('du_rente_erhoet');
+  
+  if (duErhoetJahre > 0 && duRenteErhoet > 0) {
+    duLeistung += `Rente erste ${Math.round(duErhoetJahre)} Jahre: ${fmt(duRenteErhoet)}`;
+  }
+  if (duRente > 0) {
+    duLeistung += `${duLeistung ? '<br>' : ''}${duErhoetJahre > 0 ? 'Monatsrente ab Verbeamtung' : 'Monatsrente'}: ${fmt(duRente)}`;
+  }
+  if (duFondsOption) {
+    duLeistung += `${duLeistung ? '<br>' : ''}Rückzahlung Fondsrente: ${duFondsrente > 0 ? fmt(duFondsrente) : 'optional'}`;
+  }
+  if (duLJ) duLeistung += `${duLeistung ? '<br>' : ''}Beitragsbefreiung bis ${duLJ}. LJ`;
   if (!duLeistung) duLeistung = '–';
   html += `<tr><td><strong>Dienstunfähigkeit</strong></td><td class="text-right amount">${fmt(duBeitrag)}</td><td>${duLeistung}</td></tr>`;
 
   // Unfall
   let unfallLeistung = '';
   if (unfallVoll > 0) unfallLeistung += `Vollinvalidität: ${fmt(unfallVoll)}`;
-  if (unfallTod > 0) unfallLeistung += `${unfallLeistung ? '<br>' : ''}Unfalltod: ${fmt(unfallTod)}`;
+  if (unfallTod > 0) unfallLeistung += `${unfallLeistung ? '<br>' : ''}Unfalltod / Übergangsleistung: ${fmt(unfallTod)}`;
   if (!unfallLeistung) unfallLeistung = '–';
   html += `<tr><td><strong>Unfall</strong></td><td class="text-right amount">${fmt(unfallBeitrag)}</td><td>${unfallLeistung}</td></tr>`;
 
@@ -899,8 +1167,8 @@ function renderNetto(netto, brutto, gesetzlKVBetrag) {
   const vorsorge = duBeitrag + unfallBeitrag + alterBeitrag + kvBeitrag + haftpflichtBeitrag;
   const vlAnlage = 40;
   const nettoVerfuegbar = netto - vorsorge - vlAnlage;
-  const gesetzlKV = gesetzlKVBetrag || (brutto * 0.213);
-  const kvRate = brutto > 0 ? gesetzlKV / brutto : 0.213;
+  const kvSatz = GKV_KONFIGURATION.gesamtArbeitnehmerSatz;
+  const gesetzlKV = brutto * kvSatz;
 
   let html = '<div class="summary-grid">';
   html += `<div class="summary-item"><div class="label">Nettobezüge</div><div class="value">${fmt(netto)}</div></div>`;
@@ -919,7 +1187,7 @@ function renderNetto(netto, brutto, gesetzlKVBetrag) {
 
   html += `<div class="info-box" style="margin-top:1rem;">
     <strong>📊 Vergleich gesetzliche Krankenversicherung:</strong><br>
-    Bei gesetzlicher KV (Satz ${(kvRate * 100).toFixed(1)}%) müssten Sie <strong>${fmt(gesetzlKV)}</strong>/Monat als Arbeitnehmeranteil zahlen.
+    Bei gesetzlicher KV (${(GKV_KONFIGURATION.halberAllgemeinerBeitragssatz * 100).toFixed(1)} % + ${(GKV_KONFIGURATION.durchschnittlicherZusatzbeitrag * 100).toFixed(1)} % ZB = ${(GKV_KONFIGURATION.gesamtArbeitnehmerSatz * 100).toFixed(1)} %, Stand ${GKV_KONFIGURATION.jahr}) würden Sie <strong>${fmt(gesetzlKV)}</strong>/Monat als Arbeitnehmeranteil zahlen.
     Sie sparen mit der privaten Beihilfe-KV gegenüber der gesetzlichen KV erheblich.
   </div>`;
 
@@ -974,30 +1242,30 @@ function drawPieChart() {
     const col = i % cols;
     const row = Math.floor(i / cols);
     const lx = 15 + col * colW;
-    const yy = ly + row * 20;
+    const y2 = ly + row * 20;
 
     ctx.fillStyle = item.farbe;
-    ctx.fillRect(lx, yy, 12, 12);
+    ctx.fillRect(lx, y2, 12, 12);
     ctx.fillStyle = '#1a2744';
     ctx.font = '11px -apple-system, sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.fillText(item.ursache + ' (' + (item.anteil * 100).toFixed(1) + '%)', lx + 18, yy);
+    ctx.fillText(item.ursache + ' (' + (item.anteil * 100).toFixed(1) + '%)', lx + 18, y2);
   });
 }
 
-function drawBarChart() {
+function drawBarChart(netto, brutto, duRente, duRenteErhoet = 0, duErhoetJahre = 0) {
   const canvas = document.getElementById('barChart');
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
-  const w = 420, h = 320;
+  const w = 420, h = 340;
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   canvas.style.width = w + 'px';
   canvas.style.height = h + 'px';
   ctx.scale(dpr, dpr);
 
-  const pad = { top: 30, right: 20, bottom: 55, left: 60 };
+  const pad = { top: 30, right: 20, bottom: 72, left: 60 };
   const cw = w - pad.left - pad.right;
   const ch = h - pad.top - pad.bottom;
 
@@ -1017,16 +1285,29 @@ function drawBarChart() {
     ctx.font = '11px -apple-system, sans-serif';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-    ctx.fillText(((4 - i) * 20) + '%', pad.left - 8, y);
+    ctx.fillText(((4 - i) * 25) + '%', pad.left - 8, y);
   }
 
-  // Balken
-  const barW = cw / VERSORGUNGSLUECKE.length * 0.7;
-  const gap = cw / VERSORGUNGSLUECKE.length;
+  // Die Tabelle liefert Versorgungswerte je Dienstjahr (0..71.75%).
+  // Daraus berechnen wir die verbleibende Luecke relativ zum aktuellen Netto.
+  const zielNetto = Math.max(0, netto);
+  const hatErhoehteRente = duErhoetJahre > 0 && duRenteErhoet > 0;
 
-  VERSORGUNGSLUECKE.forEach((item, i) => {
+  const lueckeByYears = VERSORGUNGSLUECKE.map(item => {
+    const versorgungsAnteil = Math.min(1, Math.max(0, item.luecke));
+    const duRenteFuerJahr = hatErhoehteRente && item.jahre <= duErhoetJahre ? duRenteErhoet : duRente;
+    const duAnteil = zielNetto > 0 ? Math.min(1, Math.max(0, duRenteFuerJahr) / zielNetto) : 0;
+    const lueckePct = Math.max(0, 1 - versorgungsAnteil - duAnteil);
+    return { jahre: item.jahre, luecke: lueckePct };
+  });
+
+  // Balken
+  const barW = cw / lueckeByYears.length * 0.7;
+  const gap = cw / lueckeByYears.length;
+
+  lueckeByYears.forEach((item, i) => {
     const x = pad.left + i * gap + (gap - barW) / 2;
-    const barH = (item.luecke / 0.80) * ch;
+    const barH = item.luecke * ch;
     const y = pad.top + ch - barH;
 
     const grad = ctx.createLinearGradient(x, y, x, pad.top + ch);
@@ -1067,7 +1348,7 @@ function drawBarChart() {
   ctx.fillStyle = '#1a2744';
   ctx.font = 'bold 12px -apple-system, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Dienstjahre', w / 2, h - 8);
+  ctx.fillText('Dienstjahre', w / 2, h - 16);
 
   ctx.save();
   ctx.translate(14, pad.top + ch / 2);
@@ -1078,8 +1359,12 @@ function drawBarChart() {
 
 // ==================== INITIALISIERUNG ====================
 document.getElementById('year').textContent = new Date().getFullYear();
+updateDienstgrade();
+updateDuJahre();
+updateDuFondsOption();
+renderKontaktkarte();
 drawPieChart();
-drawBarChart();
+drawBarChart(0, 0, 0);
 recalc();
 </script>
 

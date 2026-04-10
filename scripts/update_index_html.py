@@ -2,9 +2,7 @@
 Run from project root: python scripts/update_index_html.py
 """
 import json, re
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
+from update_common import ROOT
 
 # Read updated data
 with open(ROOT / 'data' / 'besoldung_compact_v2.json', 'r') as f:

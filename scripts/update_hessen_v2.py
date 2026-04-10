@@ -4,36 +4,13 @@ Uses 2025 ESt formula (§32a EStG, Inflationsausgleichsgesetz).
 Run from project root: python scripts/update_hessen_v2.py
 """
 import json
-import math
-from pathlib import Path
-
-# ── 2025 Einkommensteuer-Formel (§ 32a EStG) ──
-def est_2025(zve):
-    """Calculate annual Einkommensteuer for 2025."""
-    if zve <= 12096:
-        return 0
-    elif zve <= 17443:
-        y = (zve - 12096) / 10000
-        return math.floor((922.98 * y + 1400) * y)
-    elif zve <= 66760:
-        z = (zve - 17443) / 10000
-        return math.floor((176.75 * z + 2397) * z + 1025.38)
-    elif zve <= 277825:
-        return math.floor(0.42 * zve - 10637.26)
-    else:
-        return math.floor(0.45 * zve - 18972.21)
-
-def calc_monthly_lst(monthly_brutto):
-    """
-    Calculate monthly Lohnsteuer for Beamte (StKl I or IV).
-    Calibrated deduction model: ~20% Vorsorgepauschale + standard deductions.
-    """
-    annual_gross = monthly_brutto * 12
-    vp = annual_gross * 0.20
-    zve = max(0, annual_gross - 1230 - 36 - vp)
-    zve = math.floor(zve)
-    annual_est = est_2025(zve)
-    return round(annual_est / 12, 2)
+from update_common import (
+    ROOT,
+    VL,
+    KIRCHENSTEUER_RATE_HESSEN,
+    GKV_ARBEITNEHMER_RATE_2026,
+    calc_monthly_lst,
+)
 
 # ── New Hessen values from PDF (gültig ab 01.12.2025) ──
 NEW_GRUNDBEZUEGE = {
@@ -45,11 +22,8 @@ NEW_GRUNDBEZUEGE = {
     'R1': 1860.41,
 }
 NEW_FAM_ZUSCHLAG = 172.10  # Stufe 1 (was 163.13)
-VL = 6.65
-KIRCHENSTEUER_RATE = 0.09  # Hessen: 9%
-KV_RATE = 0.213  # GKV-Vergleichssatz
-
-ROOT = Path(__file__).resolve().parent.parent
+KIRCHENSTEUER_RATE = KIRCHENSTEUER_RATE_HESSEN
+KV_RATE = GKV_ARBEITNEHMER_RATE_2026
 
 # Load original data
 with open(ROOT / 'data' / 'besoldung_compact_v2.json', 'r') as f:
